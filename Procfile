@@ -1,0 +1,1 @@
+web: gunicorn offseason.wsgi --log-file -
