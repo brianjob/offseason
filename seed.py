@@ -3,6 +3,10 @@ from trades.models import League, Manager, Team, Player, Pick
 from offseason.models import MessageType, Message
 from django.contrib.auth.models import User
 
+import os
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'offseason.settings'
+
 django.setup()
 
 u1 = User.objects.get(pk=1)
