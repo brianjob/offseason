@@ -1,0 +1,17 @@
+{% extends "trades/trade.html" %}
+
+{% block title %}
+Trade Pending Response
+{% endblock %}
+
+{% block trade_header %}
+<h2>Trade Pending Response</h2>
+{% endblock %}
+
+{% block trade_form %}
+	<form action="{% url 'trades:cancel_trade' %}" method="post">
+		{% csrf_token %}
+			<input type="hidden" name="trade_id" value="{{trade.id}}"/>
+			<input type="submit" value="Cancel" class="btn btn-default" />
+	</form>
+{% endblock %}

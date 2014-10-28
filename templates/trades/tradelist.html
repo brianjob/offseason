@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Team 1</th>
+				<th>Team 2</th>
+				<th>Date Proposed</th>
+				<th>Date Accepted</th>
+				<th>Date Rejected</th>
+				<th>Date Completed</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for trade in trades.all %}
+			<tr>
+				<td>{{trade.team1.name}}</td>
+				<td>{{trade.team2.name}}</td>
+				<td>{{trade.proposed_date}}</td>
+				<td>{{trade.accepted_date}}</td>
+				<td>{{trade.rejected_date}}</td>
+				<td>{{trade.completed_date}}</td>
+				<td><a class="btn btn-primary btn-sm" href="{% url 'trades:trade' trade.pk %}">
+					View Trade
+				</a>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

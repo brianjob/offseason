@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+	{% block trade_header %} {% endblock %}
+	<h3>{{trade.team1.name}}</h3>
+	<div class="row">
+		<table class="table double-table table-condensed">
+			<thead>
+				<tr><th>name</th><th>position</th><th>team</th>
+			<thead>
+			<tbody>
+			{% for p in t1_players %}
+				<tr><td>{{p.player.name}}</td><td>{{p.player.position}}</td><td>{{p.player.real_team}}</td></tr>
+			{% endfor %}
+			</tbody>
+		</table>
+
+		<table class="table double-table table-condensed">
+			<thead>
+				<tr><th>round</th><th>year</th></tr>
+			</thead>
+			<tbody>
+			{% for p in t1_picks %}
+				<tr><td>{{p.pick.round}}</td><td>{{p.pick.year}}</td></tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<h3>{{trade.team2.name}}</h3>
+	<div class="row">
+		<table class="table double-table table-condensed">
+			<thead>
+				<tr><th>name</th><th>position</th><th>team</th>
+			<thead>
+			<tbody>
+			{% for p in t2_players %}
+				<tr><td>{{p.player.name}}</td><td>{{p.player.position}}</td><td>{{p.player.real_team}}</td></tr>
+			{% endfor %}
+			</tbody>
+		</table>
+
+		<table class="table double-table table-condensed">
+			<thead>
+				<tr><th>round</th><th>year</th></tr>
+			</thead>
+			<tbody>
+			{% for p in t2_picks %}
+				<tr><td>{{p.pick.round}}</td><td>{{p.pick.year}}</td></tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	{% block trade_form %}
+	{% endblock %}
+</div>
+
+<style>
+	form {
+		display: inline;
+	}
+{% endblock %}

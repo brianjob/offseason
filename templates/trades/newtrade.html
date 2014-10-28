@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+	
+{% block title %}
+	New Trade
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <form action="{% url 'trades:propose_trade' t2.id %}" method='post'>
+        {% csrf_token %}
+        <div class="row">
+            <h3>{{t1.name}} players</h3>
+            <table class="table double-table">
+                <thead>
+                    <tr><th>select</th><th>name</th><th>position</th><th>team</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in t1_arms %}
+                    <tr class="player">
+                        <td><input type="checkbox" name="player_{{p.id}}" /></td>
+                        <td>{{p.name}}</td>
+                        <td>{{p.position}}</td>
+                        <td>{{p.real_team}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <table class="table double-table">
+                <thead>
+                    <tr><th>select</th><th>name</th><th>position</th><th>team</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in t1_bats %}
+                    <tr class="player">
+                        <td><input type="checkbox" name="player_{{p.id}}" /></td>
+                        <td>{{p.name}}</td>
+                        <td>{{p.position}}</td>
+                        <td>{{p.real_team}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <h3>{{t1.name}} picks</h3>
+            <table class="table double-table table-condensed">
+                <thead>
+                    <tr><th>select</th><th>round</th><th>year</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in t1_picks1 %}
+                    <tr class="pick">
+                        <td><input type="checkbox" name="pick_{{p.id}}" /></td>
+                        <td>{{p.round}}</td>
+                        <td>{{p.year}}</td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+            <table class="table double-table table-condensed">
+                <thead>
+                    <tr><th>select</th><th>round</th><th>year</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in t1_picks2 %}
+                    <tr class="pick">
+                        <td><input type="checkbox" name="pick_{{p.id}}" /></td>
+                        <td>{{p.round}}</td>
+                        <td>{{p.year}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <h3>{{t2.name}} players</h3>
+            <table class="table double-table table-condensed">
+                <thead>
+                    <tr><th>select</th><th>name</th><th>position</th><th>team</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in t2_arms %}
+                    <tr class="player">
+                        <td><input type="checkbox" name="player_{{p.id}}" /></td>
+                        <td>{{p.name}}</td>
+                        <td>{{p.position}}</td>
+                        <td>{{p.real_team}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <table class="table double-table table-condensed">
+                <thead>
+                    <tr><th>select</th><th>name</th><th>position</th><th>team</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in t2_bats %}
+                    <tr class="player">
+                        <td><input type="checkbox" name="player_{{p.id}}" /></td>
+                        <td>{{p.name}}</td>
+                        <td>{{p.position}}</td>
+                        <td>{{p.real_team}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <h3>{{t2.name}} picks</h3>
+            <table class="table double-table table-condensed">
+                <thead>
+                    <tr><th>select</th><th>round</th><th>year</th></tr>
+                </thead>
+                {% for p in t2_picks1 %}
+                <tr class="pick">
+                    <td><input type="checkbox" name="pick_{{p.id}}" /></td>
+                    <td>{{p.round}}</td>
+                    <td>{{p.year}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <table class="table double-table table-condensed">
+                <thead>
+                    <tr><th>select</th><th>round</th><th>year</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in t2_picks2 %}
+                    <tr class="pick">
+                        <td><input type="checkbox" name="pick_{{p.id}}" /></td>
+                        <td>{{p.round}}</td>
+                        <td>{{p.year}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Propose Trade" />
+        <a href="/trades/league/t1.league_id" class="btn btn-default">Cancel</a>
+    </form>
+</div>
+
+{% endblock %}

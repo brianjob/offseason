@@ -1,0 +1,17 @@
+{% extends "trades/trade.html" %}
+
+{% block title %}
+Vote on Trade
+{% endblock %}
+
+{% block trade_header %}
+<h2>Vote on Trade</h2>
+{% endblock %}
+
+{% block trade_form %}
+	<form action="{% url 'trades:veto' %}" method="post">
+		{% csrf_token %}
+		<input type="hidden" name="trade_id" value="{{trade.id}}"/>
+		<input type="submit" value="Vote Against" class="btn btn-primary" />
+	</form>
+{% endblock %}

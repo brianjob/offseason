@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<h2>{{league.name}}</h2>
+		{% if msg %}
+		<div class="alert alert-{{msg.message_type.bootstrap_class}}">{{msg.text}}</div>
+		{% endif %}
+		<table class="table">
+			{% for team in league.team_set.all %}
+				<tr>
+					<td><a href="/trades/team/{{team.pk}}">{{team.name}}</a></td>
+				{% if request.user.manager.id == team.manager.id %}
+					<td></td>
+				{% else %}
+					<td><a class="btn btn-primary btn-sm" href="/trades/newtrade/{{team.pk}}">propose trade</a></td>
+				{% endif %}
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+{% endblock %}

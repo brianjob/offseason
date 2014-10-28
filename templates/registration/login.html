@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+
+<div class="container-fluid city-scape background-image">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 jumbotron title">
+			<h1>Offseason</h1>
+			The simple way to trade all year long.
+		</div>
+	</div>
+	<div class="col-md-2 col-md-offset-5">
+		{% if form.errors %}
+		<p>Your username and password didn't match. Please try again.</p>
+		{% endif %}
+		<form method="post" class="" action="{% url 'django.contrib.auth.views.login' %}" role="form">
+			{% csrf_token %}
+				<input class="form-control" type="text" name="username" placeholder="Username"/>
+				<input class="form-control" type="password" name="password" placeholder="Password"/>
+				<input type="submit" value="Login" class="btn btn-primary form-control"/>
+				<input type="hidden" name="next" value="{{ next }}" />
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+{% block navigation %}
+{% endblock %}

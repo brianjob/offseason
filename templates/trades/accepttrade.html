@@ -1,0 +1,22 @@
+{% extends "trades/trade.html" %}
+
+{% block title %}
+Proposed Trade
+{% endblock %}
+
+{% block trade_header %}
+<h2>Trade proposed by {{trade.team1.name}}</h2>
+{% endblock %}
+
+{% block trade_form %}
+	<form action="{% url 'trades:accept_trade' %}" method="post">
+		{% csrf_token %}
+		<input type="hidden" name="trade_id" value="{{trade.id}}"/>
+		<input type="submit" value="Accept" class="btn btn-primary" />
+	</form>
+	<form action="{% url 'trades:reject_trade' %}" method="post">
+		{% csrf_token %}
+			<input type="hidden" name="trade_id" value="{{trade.id}}"/>
+			<input type="submit" value="Reject" class="btn btn-danger" />
+	</form>
+{% endblock %}
