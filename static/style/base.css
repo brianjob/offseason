@@ -1,0 +1,31 @@
+
+.double-table {
+    width: 46%;
+    float: left;
+    margin-right: 4%;
+}
+
+.city-scape {
+	background-image: url(/static/images/city-scape.jpg);
+}
+
+.background-image {
+    background-size: 100%;
+    background-repeat: no-repeat;
+    color: white;
+    height: 945px;
+    font-weight: 100;
+}
+
+.title {
+	margin-top: 10%;
+	text-align: center;
+}
+
+.jumbotron {
+	background-color: inherit;
+}
+
+.form-control {
+	margin-top: 2px;
+}
