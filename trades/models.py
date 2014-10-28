@@ -10,7 +10,7 @@ class Manager(models.Model):
 
 class League(models.Model):
 	name = models.CharField(max_length=200)
-	yahoo_id = models.CharField(max_length=200)
+	yahoo_id = models.CharField(max_length=200, null = True)
 
 	def __unicode__(self):
 		return self.name
@@ -18,7 +18,7 @@ class League(models.Model):
 class Team(models.Model):
 	name = models.CharField(max_length=50)
 	league = models.ForeignKey(League)
-	yahoo_id = models.CharField(max_length=200)
+	yahoo_id = models.CharField(max_length=200, null = True)
 	manager = models.OneToOneField(Manager)
 
 	def __unicode__(self):
