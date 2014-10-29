@@ -14,7 +14,7 @@ import yahoo.application
 CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
 CONSUMER_SECRET   = '172cc969032d0d62e4312932729536fc9d149df8'
 APPLICATION_ID    = 'etzuu634'
-CALLBACK_URL      = 'https://intense-retreat-2626.herokuapp.com/trades/callback'
+CALLBACK_URL      = 'http://intense-retreat-2626.herokuapp.com/trades/callback'
 
 @login_required
 def home(request):
@@ -273,6 +273,7 @@ def authenticate_yahoo_user(request):
 	
 	# Fetch request token
 	request_token = oauthapp.get_request_token(CALLBACK_URL)
+	request.session['request_token'] = request_token
 	
 	# Redirect user to authorization url
 	redirect_url  = oauthapp.get_authorization_url(request_token)
@@ -283,11 +284,13 @@ def callback(request):
 	# Exchange request token for authorized access token
 	oauthapp      = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
 
+	# Fetch request token
+	request_token = request.session['request_token']
+
 	# Exchange request token for authorized access token
 	verifier  = request.GET['oauth_verifier'] # must fetch oauth_verifier from request
-	oauth_token = request.GET['oauth_token']
 
-	access_token  = oauthapp.get_access_token(oauth_token, verifier)
+	access_token  = oauthapp.get_access_token(request_token, verifier)
 
 	# update access token
 	oauthapp.token = access_token
