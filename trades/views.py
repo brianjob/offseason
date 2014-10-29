@@ -9,6 +9,7 @@ from offseason.models import Message
 from trades.helpers import involved_in_trade, is_proposer, is_receiver
 from django.db.models import Q
 import yahoo.application
+import yahoo.oauth
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
@@ -273,7 +274,7 @@ def authenticate_yahoo_user(request):
 	
 	# Fetch request token
 	request_token = oauthapp.get_request_token(CALLBACK_URL)
-	request.session['request_token'] = request_token
+	request.session['request_token'] = request_token.to_string()
 	
 	# Redirect user to authorization url
 	redirect_url  = oauthapp.get_authorization_url(request_token)
@@ -285,7 +286,7 @@ def callback(request):
 	oauthapp      = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
 
 	# Fetch request token
-	request_token = request.session['request_token']
+	request_token = yahoo.oauth.RequestToken.from_string(request.session['request_token'])
 
 	# Exchange request token for authorized access token
 	verifier  = request.GET['oauth_verifier'] # must fetch oauth_verifier from request
