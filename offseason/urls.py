@@ -15,5 +15,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'login/*$', 'django.contrib.auth.views.login'),
     url(r'logout', 'django.contrib.auth.views.logout', {'template_name': 'registration/login.html'}),
-    url(r'^$', 'trades.views.home')
+    url(r'^$', 'trades.views.home'),
+    url(r'^.tMgutFCXAM_a9yQlnXOFj0GZ.EIc1k0Eq4opnsAPg--.html$', 'django.contrib.auth.views.login')
 )
