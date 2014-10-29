@@ -23,5 +23,8 @@ urlpatterns = patterns('trades.views',
     url(r'^drafts$', views.drafts, name='drafts'),
     url(r'^pending$', views.pending, name='pending'),
     url(r'^my_trans$', views.my_trans, name='my_trans'),
-    url(r'^league_trans$', views.league_trans, name='league_trans')
+    url(r'^league_trans$', views.league_trans, name='league_trans'),
+
+    url(r'^authenticate_yahoo_user$', views.authenticate_yahoo_user, name='authenticate_yahoo_user'),
+    url(r'^callback$', views.callback, name='callback')
 )

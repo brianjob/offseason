@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from offseason.models import Message
 from trades.helpers import involved_in_trade, is_proposer, is_receiver
 from django.db.models import Q
-#import yahoo.application
+import yahoo.application
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
@@ -21,6 +21,8 @@ def home(request):
 	t = Team.objects.get(manager=request.user.manager)
 	l = t.league
 	return redirect('trades/league/%s' % l.id)
+
+
 
 @login_required
 def league(request, league_id=None, msg=''):
@@ -266,11 +268,12 @@ def league_trans(request):
 
 
 def authenticate_yahoo_user(request):
-
-
+	# Exchange request token for authorized access token
+	oauthapp      = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
+	
 	# Fetch request token
 	request_token = oauthapp.get_request_token(CALLBACK_URL)
-
+	
 	# Redirect user to authorization url
 	redirect_url  = oauthapp.get_authorization_url(request_token)
 
@@ -278,9 +281,13 @@ def authenticate_yahoo_user(request):
 
 def callback(request):
 	# Exchange request token for authorized access token
-	verifier  = request.get('oauth_verifier') # must fetch oauth_verifier from request
-
 	oauthapp      = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
+
+	# Fetch request token
+	request_token = oauthapp.get_request_token(CALLBACK_URL)
+
+	# Exchange request token for authorized access token
+	verifier  = request.get('oauth_verifier') # must fetch oauth_verifier from request
 
 	access_token  = oauthapp.get_access_token(request_token, verifier)
 
@@ -289,4 +296,4 @@ def callback(request):
 
 	profile = oauthapp.getProfile()
 
-	print profile
+	return render(request, 'trades/debug.html', { 'profile' : profile })
