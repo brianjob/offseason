@@ -287,7 +287,7 @@ def callback(request):
 	request_token = oauthapp.get_request_token(CALLBACK_URL)
 
 	# Exchange request token for authorized access token
-	verifier  = request.get('oauth_verifier') # must fetch oauth_verifier from request
+	verifier  = request.GET['oauth_verifier'] # must fetch oauth_verifier from request
 
 	access_token  = oauthapp.get_access_token(request_token, verifier)
 
