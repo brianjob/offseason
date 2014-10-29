@@ -14,7 +14,7 @@ import yahoo.application
 CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
 CONSUMER_SECRET   = '172cc969032d0d62e4312932729536fc9d149df8'
 APPLICATION_ID    = 'etzuu634'
-CALLBACK_URL      = 'http://intense-retreat-2626.herokuapp.com/trades/callback'
+CALLBACK_URL      = 'https://intense-retreat-2626.herokuapp.com/trades/callback'
 
 @login_required
 def home(request):
