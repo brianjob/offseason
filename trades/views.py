@@ -283,13 +283,11 @@ def callback(request):
 	# Exchange request token for authorized access token
 	oauthapp      = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
 
-	# Fetch request token
-	request_token = oauthapp.get_request_token(CALLBACK_URL)
-
 	# Exchange request token for authorized access token
 	verifier  = request.GET['oauth_verifier'] # must fetch oauth_verifier from request
+	oauth_token = request.GET['oauth_token']
 
-	access_token  = oauthapp.get_access_token(request_token, verifier)
+	access_token  = oauthapp.get_access_token(oauth_token, verifier)
 
 	# update access token
 	oauthapp.token = access_token
