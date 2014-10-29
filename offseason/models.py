@@ -23,6 +23,7 @@ class Message(models.Model):
 	VOTE_SUCCESS = "You have successfully voted on this trade"
 	UNEQUAL_PICKS = "Trades cannot involve an unequal number of picks"
 	EMPTY_TRADE = "Trades cannot be empty"
+	PASSWORD_CHANGED = "Your password has been successfully changed"
 
 	def __unicode__(self):
 		return self.text

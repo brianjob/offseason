@@ -8,6 +8,13 @@ from django.core.urlresolvers import reverse
 from offseason.models import Message
 from trades.helpers import involved_in_trade, is_proposer, is_receiver
 from django.db.models import Q
+#import yahoo.application
+	
+# Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
+CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
+CONSUMER_SECRET   = '172cc969032d0d62e4312932729536fc9d149df8'
+APPLICATION_ID    = 'etzuu634'
+CALLBACK_URL      = 'http://intense-retreat-2626.herokuapp.com/trades/callback'
 
 @login_required
 def home(request):
@@ -256,3 +263,30 @@ def my_trans(request):
 def league_trans(request):
 	trades = Trade.objects.filter(team1__league=request.user.manager.team.league).exclude(completed_date=None)
 	return render(request, 'trades/tradelist.html', {'trades' : trades })
+
+
+def authenticate_yahoo_user(request):
+
+
+	# Fetch request token
+	request_token = oauthapp.get_request_token(CALLBACK_URL)
+
+	# Redirect user to authorization url
+	redirect_url  = oauthapp.get_authorization_url(request_token)
+
+	return HttpResponseRedirect(redirect_url)
+
+def callback(request):
+	# Exchange request token for authorized access token
+	verifier  = request.get('oauth_verifier') # must fetch oauth_verifier from request
+
+	oauthapp      = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
+
+	access_token  = oauthapp.get_access_token(request_token, verifier)
+
+	# update access token
+	oauthapp.token = access_token
+
+	profile = oauthapp.getProfile()
+
+	print profile

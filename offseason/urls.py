@@ -16,5 +16,6 @@ urlpatterns = patterns('',
     url(r'login/*$', 'django.contrib.auth.views.login'),
     url(r'logout', 'django.contrib.auth.views.logout', {'template_name': 'registration/login.html'}),
     url(r'^$', 'trades.views.home'),
-    url(r'^.tMgutFCXAM_a9yQlnXOFj0GZ.EIc1k0Eq4opnsAPg--.html$', 'django.contrib.auth.views.login')
+    url(r'^changepassword$', 'django.contrib.auth.views.password_change'),
+    url(r'^password_change_done$', 'offseason.views.password_change_done', name='password_change_done')
 )

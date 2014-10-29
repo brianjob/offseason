@@ -50,7 +50,8 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a>{{request.user.username}}</a></li>  
+        <li><a>{{request.user.username}}</a></li>
+        <li><a href="{% url 'django.contrib.auth.views.password_change' %}">Change Password</a></li>  
         <li><a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
