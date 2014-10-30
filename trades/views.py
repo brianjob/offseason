@@ -269,9 +269,21 @@ def league_trans(request):
 
 
 def authenticate_yahoo_user(request):
-	li = League_Import()
-	request.session['request_token'] = li.get_request_token_str()
-	return HttpResponseRedirect(li.get_authorization_url())
+	# li = League_Import()
+	# request.session['request_token'] = li.get_request_token_str()
+	# return HttpResponseRedirect(li.get_authorization_url())
+
+		# Exchange request token for authorized access token
+	oauthapp      = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
+	
+	# Fetch request token
+	request_token = oauthapp.get_request_token(CALLBACK_URL)
+	request.session['request_token'] = request_token.to_string()
+	
+	# Redirect user to authorization url
+	redirect_url  = oauthapp.get_authorization_url(request_token)
+
+	return HttpResponseRedirect(redirect_url)
 
 def callback(request):
 	# li = League_Import(request.session['request_token'], request.GET['oauth_verifier'])
