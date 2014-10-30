@@ -296,6 +296,18 @@ def callback(request):
 	# update access token
 	oauthapp.token = access_token
 
-	profile = oauthapp.getProfile()
+	query = "select * from fantasysports.leagues where league_key='328.l.5940'"
+
+	import yahoo.yql
+
+	response = yahoo.yql.YQLQuery().execute(query)
+	if 'query' in response and 'results' in response['query']:
+		profile = response['query']['results']
+	elif 'error' in response:
+		profile = 'YQL query failed with error: "%s".' % response['error']['description']
+	else:
+		profile = 'YQL response malformed.'
+
+	
 
 	return render(request, 'trades/debug.html', { 'profile' : profile })
