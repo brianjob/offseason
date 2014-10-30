@@ -12,11 +12,15 @@ class League_Import(object):
 	def __init__(self, request_token_str=None, verifier=None):
 		self.oauthapp = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
 
+		print request_token_str + ' - ' + verifier + ' - '
+
 		if request_token_str is not None and verifier is not None:
+			print 'non null'
 			self.request_token = yahoo.oauth.RequestToken.from_string(request_token_str)
 			self.oauthapp.token  = self.oauthapp.get_access_token(self.request_token, verifier)
 		else:
 			self.request_token = self.oauthapp.get_request_token(CALLBACK_URL)
+			print 'null'
 
 	def get_request_token_str(self):
 		return self.oauthapp.get_request_token(CALLBACK_URL).to_string()
@@ -31,6 +35,9 @@ class League_Import(object):
 		return self.run_query("select * from fantasysports.leagues where league_key = '%s'" % self.get_league_key(league_id))['league']['name']
 
 	def run_query(self, query):
+		if self.oauthapp.token is None:
+			raise Exception('access token not generated')
+
 		response = self.oauthapp.yql(query)
 
 		if 'query' in response and 'results' in response['query']:
