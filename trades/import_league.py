@@ -34,6 +34,8 @@ class League_Import(object):
 		if self.oauthapp.token is None:
 			raise Exception('access token not generated')
 
+		print 'running: ' + query
+
 		response = self.oauthapp.yql(query)
 
 		if 'query' in response and 'results' in response['query']:
