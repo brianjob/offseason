@@ -270,6 +270,10 @@ def authenticate_yahoo_user(request):
 def callback(request):
 	li = League_Import(request.session['request_token'], request.GET['oauth_verifier'])
 
-	profile = li.get_league_name('5940')
+	bens_team = Team.objects.get(name="Cano's Huge Wallet")
+
+	li.fill_roster(bens_team)
+
+	profile = "did it work?"
 
 	return render(request, 'trades/debug.html', { 'profile' : profile })

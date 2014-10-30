@@ -1,5 +1,7 @@
 import yahoo.application
 import yahoo.oauth
+from django.utils import timezone
+from trades.models import Player, Team
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
@@ -25,10 +27,54 @@ class League_Import(object):
 		return self.oauthapp.get_authorization_url(self.request_token)
 
 	def get_league_key(self, league_id):
-		return self.run_query("select * from fantasysports.games where game_key = 'mlb'")['game']['game_key'] + '.l.' + str(league_id)
+		return "{}.l.{}".format(self.run_query("select * from fantasysports.games where game_key = 'mlb'")['game']['game_key'], str(league_id))
+
+	def get_team_key(self, league_id, team_id):
+		return "{}.t.{}".format(self.get_league_key(league_id), team_id)
 
 	def get_league_name(self, league_id):
-		return self.run_query("select * from fantasysports.leagues where league_key = '%s'" % self.get_league_key(league_id))['league']['name']
+		return self.run_query("select * from fantasysports.leagues where league_key = '{}'".format(self.get_league_key(league_id)))['league']['name']
+
+	def fill_roster(self, team):
+		if team.yahoo_id is None:
+			raise Exception('Roster cannot be auto filled with a null team yahoo id')
+		if team.league.yahoo_id is None:
+			raise Exception('Roster cannot be auto filled with a null league yahoo id')
+
+		team_key = self.get_team_key(team.league.yahoo_id, team.yahoo_id)
+		team_result = self.run_query(
+			"select * from fantasysports.teams.roster where team_key='{}' and date='{}'"
+			.format(team_key, timezone.now().strftime("%Y-%m-%d"))
+		)['team']
+
+		for player in team_result['players']:
+			p = Player(
+				name=player['name']['full'],
+				position=player['display_position'].upper(),
+				real_team=player['editorial_team_abbr'].upper(),
+				fantasy_team=team
+			)
+
+			p.save()
+
+	# def fill_league(self, league):
+	# 	if league.yahoo_id is None:
+	# 		raise Exception('League cannot be auto filled with a null league yahoo id')
+
+	# 	league_key = self.get_league_key(league.yahoo_id)
+
+	# 	league_result = self.run_query(
+	# 		"select * from fantasysports.teams where league_key = '{}'"
+	# 		.format(league_key)
+	# 	)
+
+	# 	for team in league_result:
+	# 		t = Team(
+	# 			name=team['name'],
+	# 			league=league,
+	# 			yahoo_id=team['team_id'],
+	# 			manager=
+	# 		)
 
 	def run_query(self, query):
 		if self.oauthapp.token is None:
