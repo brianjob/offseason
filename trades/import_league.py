@@ -25,7 +25,7 @@ class League_Import(object):
 		return self.oauthapp.get_authorization_url(self.request_token)
 
 	def get_league_key(self, league_id):
-		return self.run_query("select * from fantasysports.games where game_key = 'mlb'")['game_key'] + 'l' + str(league_id)
+		return self.run_query("select * from fantasysports.games where game_key = 'mlb'")['game']['game_key'] + 'l' + str(league_id)
 
 	def get_league_name(self, league_id):
 		return self.run_query("select * from fantasysports.leagues where league_key = '%s'" % self.get_league_key(league_id))['league']['name']
