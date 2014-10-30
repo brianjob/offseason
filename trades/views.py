@@ -299,7 +299,7 @@ def callback(request):
 
 	query = "select * from fantasysports.leagues where league_key='328.l.5940'"
 
-	response = yahoo.yql.YQLQuery(access_token).execute(query)
+	response = yahoo.yql.YQLQuery().execute(query, access_token)
 	if 'query' in response and 'results' in response['query']:
 		profile = response['query']['results']
 	elif 'error' in response:
