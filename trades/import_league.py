@@ -19,7 +19,7 @@ class League_Import(object):
 			self.request_token = self.oauthapp.get_request_token(CALLBACK_URL)
 
 	def get_request_token_str(self):
-		return self.oauthapp.get_request_token(CALLBACK_URL).to_string()
+		return self.request_token.to_string()
 
 	def get_authorization_url(self):
 		return self.oauthapp.get_authorization_url(self.request_token)

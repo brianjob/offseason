@@ -9,13 +9,7 @@ from offseason.models import Message
 from trades.helpers import involved_in_trade, is_proposer, is_receiver
 from django.db.models import Q
 from trades.import_league import League_Import
-import yahoo.application
-import yahoo.oauth
 
-CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
-CONSUMER_SECRET   = '172cc969032d0d62e4312932729536fc9d149df8'
-APPLICATION_ID    = 'etzuu634'
-CALLBACK_URL      = 'http://intense-retreat-2626.herokuapp.com/trades/callback'
 
 @login_required
 def home(request):
@@ -269,46 +263,13 @@ def league_trans(request):
 
 
 def authenticate_yahoo_user(request):
-	# li = League_Import()
-	# request.session['request_token'] = li.get_request_token_str()
-	# return HttpResponseRedirect(li.get_authorization_url())
-
-		# Exchange request token for authorized access token
-	oauthapp      = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
-	
-	# Fetch request token
-	request_token = oauthapp.get_request_token(CALLBACK_URL)
-	request.session['request_token'] = request_token.to_string()
-	
-	# Redirect user to authorization url
-	redirect_url  = oauthapp.get_authorization_url(request_token)
-
-	return HttpResponseRedirect(redirect_url)
+	li = League_Import()
+	request.session['request_token'] = li.get_request_token_str()
+	return HttpResponseRedirect(li.get_authorization_url())
 
 def callback(request):
-	# li = League_Import(request.session['request_token'], request.GET['oauth_verifier'])
+	li = League_Import(request.session['request_token'], request.GET['oauth_verifier'])
 
-	# profile = li.get_league_name('5940')
-
-
-		# Exchange request token for authorized access token
-	oauthapp      = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
-
-	# Fetch request token
-	request_token = yahoo.oauth.RequestToken.from_string(request.session['request_token'])
-
-	# Exchange request token for authorized access token
-	verifier  = request.GET['oauth_verifier'] # must fetch oauth_verifier from request
-
-	access_token  = oauthapp.get_access_token(request_token, verifier)
-
-	# update access token
-	oauthapp.token = access_token
-
-	query = "select * from fantasysports.leagues where league_key='328.l.5940'"
-
-	response = oauthapp.yql(query)
-
-	profile = response['query']
+	profile = li.get_league_name('5940')
 
 	return render(request, 'trades/debug.html', { 'profile' : profile })
