@@ -10,7 +10,6 @@ from trades.helpers import involved_in_trade, is_proposer, is_receiver
 from django.db.models import Q
 import yahoo.application
 import yahoo.oauth
-import yahoo.yql
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
@@ -299,7 +298,7 @@ def callback(request):
 
 	query = "select * from fantasysports.leagues where league_key='328.l.5940'"
 
-	response = yahoo.yql.YQLQuery().execute(query, access_token)
+	response = oauthapp.yql(query)
 	if 'query' in response and 'results' in response['query']:
 		profile = response['query']['results']
 	elif 'error' in response:
