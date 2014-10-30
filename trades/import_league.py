@@ -47,7 +47,7 @@ class League_Import(object):
 			.format(team_key, timezone.now().strftime("%Y-%m-%d"))
 		)['team']
 
-		for player in team_result['players']:
+		for player in team_result['player']:
 			p = Player(
 				name=player['name']['full'],
 				position=player['display_position'].upper(),
