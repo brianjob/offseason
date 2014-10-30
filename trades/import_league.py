@@ -12,7 +12,7 @@ class League_Import(object):
 	def __init__(self, request_token_str=None, verifier=None):
 		self.oauthapp = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
 
-		print request_token_str + ' - ' + verifier + ' - '
+		print str(request_token_str) + ' - ' + str(verifier) + ' - '
 
 		if request_token_str is not None and verifier is not None:
 			print 'non null'
