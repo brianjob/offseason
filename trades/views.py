@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from offseason.models import Message
 from trades.helpers import involved_in_trade, is_proposer, is_receiver
 from django.db.models import Q
-from trades.import_league import League_Import
+
 
 
 @login_required
@@ -71,20 +71,15 @@ def propose_trade(request, team_id):
 			players.append(key.split('_')[1])
 		elif 'pick' in key:
 			picks.append(key.split('_')[1])
-	
-	if len(players) == 0 and len(picks) == 0:
-		msg = Message.objects.get(text=Message.EMPTY_TRADE)
-		return HttpResponseRedirect(reverse('trades:league', 
-			args=(request.user.manager.team.league.id, )) 
-				+ '?msg=' + str(msg.id))
 
 	t2 = Team.objects.get(pk=team_id)
 
-	t1 = request.user.manager.team
+	if len(players) == 0 and len(picks) == 0:
+		msg = Message.objects.get(text=Message.EMPTY_TRADE)
+		return HttpResponseRedirect(reverse('trades:league', 
+			args=(t2.league.id, )) + '?msg=' + str(msg.id))
 
-	if (t1.league != t2.league):
-		return render(request, 'trades/tradeproposed.html', 
-			{ 'error_message' : 'you cannot propose a trade to a team in a different league' })
+	t1 = request.user.manager.team_set.get(league=t2.league)
 
 	trade = Trade(team1=t1, team2=t2)
 
@@ -124,8 +119,7 @@ def cancel_trade(request):
 	else:
 		msg = Message.objects.get(text=Message.NOT_PROPOSER)
 	return HttpResponseRedirect(reverse('trades:league',
-		args=(request.user.manager.team.league.id, ))
-			+ '?msg=' + str(msg.id))
+		args=(trade.team1.league.id, )) + '?msg=' + str(msg.id))
 
 @login_required
 def submit_trade(request):
@@ -178,7 +172,7 @@ def veto(request):
 	trade_id = request.POST['trade_id']
 	trade = get_object_or_404(Trade, pk=trade_id)
 
-	if trade.team1.league != request.user.manager.team.league:
+	if trade.team1.league not in [t.league for t in request.user.manager.team_set.all()]:
 		msg = Message.objects.get(text=Message.CANT_VOTE)
 
 	else:
@@ -233,47 +227,31 @@ def trade(request, trade_id):
 							  't2_picks' : t2_picks})
 @login_required
 def inbox(request):
-	trades = Trade.objects.filter(team2=request.user.manager.team).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
+	trades = Trade.objects.filter(team2_in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
 	return render(request, 'trades/tradelist.html', { 'trades' : trades })
 
 @login_required
 def outbox(request):
-	trades = Trade.objects.filter(team1=request.user.manager.team).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
+	trades = Trade.objects.filter(team1_in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
 	return render(request, 'trades/tradelist.html',	{ 'trades' : trades })
 
 @login_required
 def drafts(request):
-	trades = Trade.objects.filter(team1=request.user.manager.team).filter(proposed_date=None)
+	trades = Trade.objects.filter(team1_in=request.user.manager.team_set.all()).filter(proposed_date=None)
 	return render(request, 'trades/tradelist.html', { 'trades': trades })
 
 @login_required
 def pending(request):
-	trades = Trade.objects.filter(Q(team1=request.user.manager.team) | Q(team2=request.user.manager.team)).exclude(accepted_date=None).filter(completed_date=None)
+	trades = Trade.objects.filter(Q(team1_in=request.user.manager.team_set.all()) | Q(team2_in=request.user.manager.team_set.all())).exclude(accepted_date=None).filter(completed_date=None)
 	return render(request, 'trades/tradelist.html', {'trades' : trades })
 
 @login_required
 def my_trans(request):
-	trades = Trade.objects.filter(Q(team1=request.user.manager.team) | Q(team2=request.user.manager.team))
+	trades = Trade.objects.filter(Q(team1_in=request.user.manager.team_set.all()) | Q(team2_in=request.user.manager.team_set.all()))
 	return render(request, 'trades/tradelist.html', {'trades' : trades })
 
 @login_required
 def league_trans(request):
-	trades = Trade.objects.filter(team1__league=request.user.manager.team.league).exclude(completed_date=None)
+	trades = Trade.objects.filter(team1__league_in=[t.league for t in request.user.manager.team_set.all()]).exclude(completed_date=None)
 	return render(request, 'trades/tradelist.html', {'trades' : trades })
 
-
-def authenticate_yahoo_user(request):
-	li = League_Import()
-	request.session['request_token'] = li.get_request_token_str()
-	return HttpResponseRedirect(li.get_authorization_url())
-
-def callback(request):
-	li = League_Import(request.session['request_token'], request.GET['oauth_verifier'])
-
-	bens_team = Team.objects.get(name="Cano's Huge Wallet")
-
-	li.fill_roster(bens_team)
-
-	profile = "did it work?"
-
-	return render(request, 'trades/debug.html', { 'profile' : profile })

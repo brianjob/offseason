@@ -1,7 +1,8 @@
 import yahoo.application
 import yahoo.oauth
 from django.utils import timezone
-from trades.models import Player, Team
+from trades.models import Player, Team, Manager, Pick
+import uuid
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
@@ -57,24 +58,47 @@ class League_Import(object):
 
 			p.save()
 
-	# def fill_league(self, league):
-	# 	if league.yahoo_id is None:
-	# 		raise Exception('League cannot be auto filled with a null league yahoo id')
 
-	# 	league_key = self.get_league_key(league.yahoo_id)
+	def fill_league(self, league):
+		if league.yahoo_id is None:
+			raise Exception('League cannot be auto filled with a null league yahoo id')
 
-	# 	league_result = self.run_query(
-	# 		"select * from fantasysports.teams where league_key = '{}'"
-	# 		.format(league_key)
-	# 	)
+		league_key = self.get_league_key(league.yahoo_id)
 
-	# 	for team in league_result:
-	# 		t = Team(
-	# 			name=team['name'],
-	# 			league=league,
-	# 			yahoo_id=team['team_id'],
-	# 			manager=
-	# 		)
+		league_result = self.run_query(
+			"select * from fantasysports.teams where league_key = '{}'"
+			.format(league_key)
+		)
+
+		for team in league_result['team']:
+			guid = team['team']['managers']['manager']['guid']
+
+			manager = Manager.objects.filter(yahoo_guid=guid)
+
+			if not manager.exists():
+				manager = Manager(
+					yahoo_guid = guid,
+					code=uuid.uuid4(),
+					email=manager['email'],
+				)
+
+				manager.save()
+
+			t = Team(
+				name=team['name'],
+				league=league,
+				yahoo_id=team['team_id'],
+				manager=manager
+			)
+
+			self.fill_roster(t)
+
+			t.save()
+
+	def add_picks(team, year):
+		for rd in range(1, 23):
+			pick = Pick(round=rd, year=year, team=team)
+			pick.save()
 
 	def run_query(self, query):
 		if self.oauthapp.token is None:

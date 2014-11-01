@@ -2,15 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Manager(models.Model):
-	yahoo_id = models.CharField(max_length=200)
-	user = models.OneToOneField(User)
+	yahoo_guid = models.CharField(max_length=200)
+	user = models.OneToOneField(User, null = True)
+	code = models.CharField(max_length=200)
+	email = models.CharField(max_length=200)
 
 	def __unicode__(self):
 		return self.user.username
 
 class League(models.Model):
 	name = models.CharField(max_length=200)
-	yahoo_id = models.CharField(max_length=200, null = True)
+	yahoo_id = models.CharField(max_length=200)
 
 	def __unicode__(self):
 		return self.name
@@ -18,8 +20,8 @@ class League(models.Model):
 class Team(models.Model):
 	name = models.CharField(max_length=50)
 	league = models.ForeignKey(League)
-	yahoo_id = models.CharField(max_length=200, null = True)
-	manager = models.OneToOneField(Manager)
+	yahoo_id = models.CharField(max_length=200)
+	manager = models.ForeignKey(Manager)
 
 	def __unicode__(self):
 		return self.name
