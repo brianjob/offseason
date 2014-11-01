@@ -78,7 +78,7 @@ class League_Import(object):
 				manager = Manager(
 					yahoo_guid = guid,
 					code=uuid.uuid4(),
-					email=manager['email'],
+					email=team['managers']['manager']['email'],
 				)
 
 				manager.save()
