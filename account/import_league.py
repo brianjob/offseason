@@ -63,8 +63,7 @@ class League_Import(object):
 		if league.yahoo_id is None:
 			raise Exception('League cannot be auto filled with a null league yahoo id')
 
-		league_key = self.get_league_key(league.yahoo_id)
-
+		league_key = league.yahoo_id
 		league_result = self.run_query(
 			"select * from fantasysports.teams where league_key = '{}'"
 			.format(league_key)
@@ -95,7 +94,22 @@ class League_Import(object):
 
 			t.save()
 
-	def add_picks(team, year):
+	def import_league(self, league_id):
+		result = self.run_query(
+			"select * from fantasysports.leagues where league_key='{}'"
+			.format(self.get_league_key(league_id))
+		)
+
+		league = League(
+			name=league['league']['name'],
+			yahoo_id=league['league']['league_key']
+		)
+
+		league.save()
+
+		self.fill_league(league)
+
+	def add_picks(self, team, year):
 		for rd in range(1, 23):
 			pick = Pick(round=rd, year=year, team=team)
 			pick.save()

@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from account.import_league import League_Import
 from django.http import HttpResponseRedirect
-from trades.models import Team
 
 # Create your views here.
 def authenticate_yahoo_user(request):
@@ -12,9 +11,7 @@ def authenticate_yahoo_user(request):
 def callback(request):
 	li = League_Import(request.session['request_token'], request.GET['oauth_verifier'])
 
-	bens_team = Team.objects.get(name="Cano's Huge Wallet")
-
-	li.fill_roster(bens_team)
+	li.import_league('5940')
 
 	profile = "did it work?"
 
