@@ -72,9 +72,9 @@ class League_Import(object):
 		for team in league_result['team']:
 			guid = team['managers']['manager']['guid']
 
-			manager = Manager.objects.filter(yahoo_guid=guid)
-
-			if not manager.exists():
+			try:
+				manager = Manager.objects.get(yahoo_guid=guid)
+			except Manager.DoesNotExist:
 				manager = Manager(
 					yahoo_guid = guid,
 					code=uuid.uuid4(),
