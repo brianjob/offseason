@@ -20,11 +20,8 @@ def home(request):
 
 
 @login_required
-def league(request, league_id=None, msg=''):
-	if (league_id):
-		l = get_object_or_404(League, pk=league_id)
-	else:
-		l = Team.objects.get(manager=request.user.manager).league
+def league(request, league_id, msg=''):
+	l = get_object_or_404(League, pk=league_id)
 
 	t = Team.objects.filter(league=l).get(manager=request.user.manager)
 
@@ -183,12 +180,8 @@ def veto(request):
 		args=(trade.team1.league.id, )) + '?msg=' + str(msg.id))
 
 @login_required
-def team(request, team_id=None):
-	if (team_id):
-		team = get_object_or_404(Team, pk=team_id)
-	else:
-		team = Team.objects.get(manager=request.user.manager)
-
+def team(request, team_id):
+	team = get_object_or_404(Team, pk=team_id)
 	return render(request, 'trades/team.html',
 							{ 'team' : team })
 

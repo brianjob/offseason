@@ -11,8 +11,8 @@ def authenticate_yahoo_user(request):
 def callback(request):
 	li = League_Import(request.session['request_token'], request.GET['oauth_verifier'])
 
-	li.import_league('5940')
+	no_email_managers = li.import_league('5940')
 
-	profile = "did it work?"
+	profile = ", ".join(no_email_managers)
 
 	return render(request, 'trades/debug.html', { 'profile' : profile })
