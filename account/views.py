@@ -2,7 +2,7 @@ from django.shortcuts import render
 from account.import_league import League_Import
 from django.http import HttpResponseRedirect
 
-def dashboard():
+def dashboard(request):
 	return render(request, 'account/dashboard.html')
 
 def import_league(request, league_id):
