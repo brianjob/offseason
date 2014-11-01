@@ -13,6 +13,7 @@ class Manager(models.Model):
 class League(models.Model):
 	name = models.CharField(max_length=200)
 	yahoo_id = models.CharField(max_length=200)
+	commissioner = models.ForeignKey(Manager)
 
 	def __unicode__(self):
 		return self.name

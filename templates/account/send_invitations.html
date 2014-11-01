@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+<div class="container">
+	<h2>Send Invitations</h2>
+	<p>The following email addresses were imported from yahoo. Fill in any blank email addressess before clicking the button below to send out league invitations.</p>
+	<div class="col-md-6">
+		<form class="horizontal-form" role="form" action="{% url account:send_invites %}">
+			{% for manager in managers_to_invite %}
+			<div class="form-group">
+			    <label for="email-{{manager.id}}" class="col-sm-2 control-label">
+			    	Email
+			    </label>
+		    	<div class="col-sm-10">
+		    	  <input type="email" class="form-control" id="email-{{manager.id}}" placeholder="Email" name="email-{{manager.id}}" value="{{manager.email}}">
+			    </div>
+			</div>
+  			{% endfor %}
+  		</form>
+	</div>
+	<div class="row">
+		<p>The following managers in your league already have Offseason accounts. They will be notified that they have been added to a new league.</p>
+	</div>
+	<div class="col-md-6">
+		<ul class="list-group">
+		{% for manager in existing_managers %}
+			<li class="list-group-item">
+				{{manager.user}}
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+</div>
+{% endblock %}

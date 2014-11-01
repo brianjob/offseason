@@ -59,9 +59,7 @@ class League_Import(object):
 			p.save()
 
 
-	def fill_league(self, league):
-		""" returns a list of all managers that don't have email addresses """
-		
+	def fill_league(self, league, commissioner):
 		if league.yahoo_id is None:
 			raise Exception('League cannot be auto filled with a null league yahoo id')
 
@@ -70,8 +68,6 @@ class League_Import(object):
 			"select * from fantasysports.teams where league_key = '{}'"
 			.format(league_key)
 		)
-
-		no_email_managers = []
 
 		for team in league_result['team']:
 			guid = team['managers']['manager']['guid']
@@ -90,9 +86,6 @@ class League_Import(object):
 					email=email
 				)
 
-				if email == '':
-					no_email_managers.append(manager)
-
 				manager.save()
 
 			t = Team(
@@ -106,11 +99,13 @@ class League_Import(object):
 
 			self.fill_roster(t)
 
-			return no_email_managers
+			if team['managers']['manager'].has_key('is_commissioner') and 
+			team['managers']['manager']['is_commissioner'] == "1":
+				league.commissioner = manager
+				league.save()
 
-
-	def import_league(self, league_id):
-		""" returns a list of all managers that don't have email addresses """
+	def import_league(self):
+		league_id = request.POST['league_id']
 
 		result = self.run_query(
 			"select * from fantasysports.leagues where league_key='{}'"
@@ -119,12 +114,13 @@ class League_Import(object):
 
 		league = League(
 			name=result['league']['name'],
-			yahoo_id=result['league']['league_key']
+			yahoo_id=result['league']['league_key'],
+			commissioner=commissioner
 		)
 
 		league.save()
 
-		return self.fill_league(league)
+		self.fill_league(league)
 
 	def add_picks(self, team, year):
 		for rd in range(1, 23):
