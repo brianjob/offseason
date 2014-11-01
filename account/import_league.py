@@ -90,9 +90,10 @@ class League_Import(object):
 				manager=manager
 			)
 
+			t.save()
+
 			self.fill_roster(t)
 
-			t.save()
 
 	def import_league(self, league_id):
 		result = self.run_query(
