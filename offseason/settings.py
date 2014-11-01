@@ -109,3 +109,5 @@ STATICFILES_DIRS = (
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
