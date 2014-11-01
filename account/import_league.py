@@ -101,8 +101,8 @@ class League_Import(object):
 		)
 
 		league = League(
-			name=league['league']['name'],
-			yahoo_id=league['league']['league_key']
+			name=result['league']['name'],
+			yahoo_id=result['league']['league_key']
 		)
 
 		league.save()
