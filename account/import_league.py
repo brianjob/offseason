@@ -1,7 +1,7 @@
 import yahoo.application
 import yahoo.oauth
 from django.utils import timezone
-from trades.models import Player, Team, Manager, Pick
+from trades.models import Player, Team, Manager, Pick, League
 import uuid
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
