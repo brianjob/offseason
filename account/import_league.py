@@ -30,8 +30,8 @@ class League_Import(object):
 	def get_league_key(self, league_id):
 		return "{}.l.{}".format(self.run_query("select * from fantasysports.games where game_key = 'mlb'")['game']['game_key'], str(league_id))
 
-	def get_team_key(self, league_id, team_id):
-		return "{}.t.{}".format(self.get_league_key(league_id), team_id)
+	def get_team_key(self, league_key, team_id):
+		return "{}.t.{}".format(league_key, team_id)
 
 	def get_league_name(self, league_id):
 		return self.run_query("select * from fantasysports.leagues where league_key = '{}'".format(self.get_league_key(league_id)))['league']['name']
