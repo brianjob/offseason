@@ -70,7 +70,7 @@ class League_Import(object):
 		)
 
 		for team in league_result['team']:
-			guid = team['team']['managers']['manager']['guid']
+			guid = team['managers']['manager']['guid']
 
 			manager = Manager.objects.filter(yahoo_guid=guid)
 
