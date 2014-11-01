@@ -1,13 +1,14 @@
 import yahoo.application
 import yahoo.oauth
 from django.utils import timezone
-from trades.models import Player, Team
+from trades.models import Player, Team, Manager, Pick
+import uuid
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
 CONSUMER_SECRET   = '172cc969032d0d62e4312932729536fc9d149df8'
 APPLICATION_ID    = 'etzuu634'
-CALLBACK_URL      = 'http://intense-retreat-2626.herokuapp.com/trades/callback'
+CALLBACK_URL      = 'http://intense-retreat-2626.herokuapp.com/account/callback'
 
 
 class League_Import(object):
@@ -58,7 +59,6 @@ class League_Import(object):
 			p.save()
 
 
-
 	def fill_league(self, league):
 		if league.yahoo_id is None:
 			raise Exception('League cannot be auto filled with a null league yahoo id')
@@ -71,9 +71,18 @@ class League_Import(object):
 		)
 
 		for team in league_result['team']:
-			manager = Manager(
-				yahoo_id=team['team']['managers']['manager']['manager_id']
-			)
+			guid = team['team']['managers']['manager']['guid']
+
+			manager = Manager.objects.filter(yahoo_guid=guid)
+
+			if not manager.exists():
+				manager = Manager(
+					yahoo_guid = guid,
+					code=uuid.uuid4(),
+					email=manager['email'],
+				)
+
+				manager.save()
 
 			t = Team(
 				name=team['name'],
@@ -81,6 +90,15 @@ class League_Import(object):
 				yahoo_id=team['team_id'],
 				manager=manager
 			)
+
+			self.fill_roster(t)
+
+			t.save()
+
+	def add_picks(team, year):
+		for rd in range(1, 23):
+			pick = Pick(round=rd, year=year, team=team)
+			pick.save()
 
 	def run_query(self, query):
 		if self.oauthapp.token is None:
