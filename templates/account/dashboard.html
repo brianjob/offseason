@@ -1,0 +1,25 @@
+{% extend "base.html" %}
+
+{% block content %}
+	<div class="container">
+		<table class="table">
+			<thead><th>Team</th><th>League</th></thead>
+			<tbody>
+				{% for team in request.user.manager.team_set.all %}
+				<tr>
+					<td>
+						<a href="{% url 'trades:team' team.id %}">
+							{{team.name}}
+						</a>
+					</td>
+					<td>
+						<a href="{% url 'trades:league' team.league.id %}">
+							{{team.league.name}}
+						</a>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
