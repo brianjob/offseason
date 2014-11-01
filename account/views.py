@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from trades.import_league import League_Import
+from account.import_league import League_Import
 from django.http import HttpResponseRedirect
 from trades.models import Team
 
