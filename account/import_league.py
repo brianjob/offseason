@@ -60,7 +60,7 @@ class League_Import(object):
 
 
 	def fill_league(self, league):
-		""" returns a list of all managers that don't have email addresses"""
+		""" returns a list of all managers that don't have email addresses """
 		
 		if league.yahoo_id is None:
 			raise Exception('League cannot be auto filled with a null league yahoo id')

@@ -2,8 +2,10 @@ from django.shortcuts import render
 from account.import_league import League_Import
 from django.http import HttpResponseRedirect
 
-# Create your views here.
-def authenticate_yahoo_user(request):
+def dashboard():
+	return render(request, 'account/dashboard.html')
+
+def import_league(request, league_id):
 	li = League_Import()
 	request.session['request_token'] = li.get_request_token_str()
 	return HttpResponseRedirect(li.get_authorization_url())
@@ -15,4 +17,4 @@ def callback(request):
 
 	profile = ", ".join(no_email_managers)
 
-	return render(request, 'trades/debug.html', { 'profile' : profile })
+	return render(request, 'account/debug.html', { 'profile' : profile })

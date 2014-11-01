@@ -1,6 +1,6 @@
 #from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from trades.models import League, Team, PlayerPiece, PickPiece, Trade, Player, Pick, Veto
 from django.utils import timezone
 from django.http import HttpResponseRedirect
@@ -8,15 +8,6 @@ from django.core.urlresolvers import reverse
 from offseason.models import Message
 from trades.helpers import involved_in_trade, is_proposer, is_receiver
 from django.db.models import Q
-
-
-
-@login_required
-def home(request):
-	t = Team.objects.get(manager=request.user.manager)
-	l = t.league
-	return redirect('trades/league/%s' % l.id)
-
 
 
 @login_required
