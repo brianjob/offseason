@@ -8,7 +8,7 @@ class Manager(models.Model):
 	email = models.CharField(max_length=200)
 
 	def __unicode__(self):
-		return self.user.username
+		return self.emal
 
 class League(models.Model):
 	name = models.CharField(max_length=200)
