@@ -99,13 +99,11 @@ class League_Import(object):
 
 			self.fill_roster(t)
 
-			if team['managers']['manager'].has_key('is_commissioner') and 
-			team['managers']['manager']['is_commissioner'] == "1":
+			if team['managers']['manager'].has_key('is_commissioner') and team['managers']['manager']['is_commissioner'] == "1":
 				league.commissioner = manager
 				league.save()
 
-	def import_league(self):
-		league_id = request.POST['league_id']
+	def import_league(self, league_id, commissioner):
 
 		result = self.run_query(
 			"select * from fantasysports.leagues where league_key='{}'"
