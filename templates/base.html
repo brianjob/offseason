@@ -35,16 +35,24 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <ul class="dropdown-toggle" data-toggle="dropdown">My Teams<span class="caret"></span></a>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">My Teams<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
           {% for team in request.user.manager.team_set.all %}
-          <li><a href="{% url 'trades:team' team.id %}">{{ team.name }}</a></li>
+            <li>
+              <a href="{% url 'trades:team' team.id %}">{{ team.name }}</a>
+            </li>
           {% endfor %}
-        </ul>
-        <ul class="dropdown-toggle" data-toggle="dropdown">My Leagues<span class="caret"></span></a>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">My Leagues<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
           {% for team in request.user.manager.team_set.all %}
-          <li><a href="{% url 'trades:league' team.league.id %}">{{ team.league.name }}</a></li>
+            <li><a href="{% url 'trades:league' team.league.id %}">{{ team.league.name }}</a></li>
           {% endfor %}
-        </ul>
+          </ul>
+        </li>
         <li><a href="{% url 'trades:league_trans' %}">Transactions</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Trades<span class="caret"></span></a>
