@@ -5,7 +5,7 @@
 <div class="container">
 	<h1>New League</h1>
 	<p>Enter your Yahoo league id in the field below. This can be found in your league settings page.</p>
-	<form action="{% url account:import_league %}" class="form-inline" role="form">
+	<form action="{% url 'account:import_league' %}" class="form-inline" role="form">
 		<div class="form-group">
 			<label class="sr-only" for="exampleInputEmail2">Email address</label>
 			<input type="text" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
