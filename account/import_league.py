@@ -57,7 +57,7 @@ class League_Import(object):
 			p.save()
 
 
-	def fill_league(self, league, commissioner):
+	def fill_league(self, league):
 		if league.yahoo_id is None:
 			raise Exception('League cannot be auto filled with a null league yahoo id')
 
