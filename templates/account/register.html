@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4" >
-		<form method="post" class="" action="{% url 'django.contrib.auth.views.login' %}" role="form">
+		<form method="post" class="" action="{% url 'account:register' %}" role="form">
 			{% csrf_token %}
 				<input class="form-control" type="text" name="email" placeholder="Email"/>
 				<input class="form-control" type="password" name="password" placeholder="Password"/>
