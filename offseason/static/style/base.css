@@ -9,6 +9,10 @@
 	background-image: url(/static/images/city-scape.jpg);
 }
 
+.day-city-scape {
+    background-image: url(/static/images/day-city-scape.jpg);
+}
+
 .background-image {
     background-repeat: no-repeat;
     color: white;
