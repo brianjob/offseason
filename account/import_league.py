@@ -122,7 +122,7 @@ class League_Import(object):
 			pick = Pick(round=rd, year=year, team=team)
 			pick.save()
 
-	def get_or_create_manager(self):
+	def get_or_create_manager(self, user):
 		# social api needs SSL so change url to reflect that
 		yahoo.application.SOCIAL_API_URL = 'https://social.yahooapis.com/vi'
 
@@ -137,8 +137,10 @@ class League_Import(object):
 				if email['is_primary'] == 'true':			
 					manager = Manager.create(
 						yahoo_guid=result['profile']['guid'],
-						email=email['handle']
+						email=email['handle'],
+						user=user
 					)
+					manager.save()
 					break;
 
 		return manager

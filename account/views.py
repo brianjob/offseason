@@ -69,16 +69,11 @@ def link_profile_callback(request):
 	li = League_Import(LINK_PROFILE_CALLBACK,
 		request.session['request_token'], request.GET['oauth_verifier'])
 
-	# manager = li.get_or_create_manager()
+	manager = li.get_or_create_manager(request.user)
 
-	# manager.user = request.user
-	# manager.save()
+	msg = 'Profile successfully Linked'
 
-#	msg = 'Profile successfully Linked'
-	
-	msg = str(li.oauthapp.getProfile())
-
-	return render(request, 'account/dashboard.html', {'success_msg' : msg})
+	return render(request, 'account/dashboard.html', {'success_msg' : manager.user.username})
 
 @login_required
 def configure_invites(request, league_id):
