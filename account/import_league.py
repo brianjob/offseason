@@ -123,33 +123,19 @@ class League_Import(object):
 			pick.save()
 
 	def get_or_create_manager(self, user):
-		# social api needs SSL so change url to reflect that
-		yahoo.application.SOCIAL_API_URL = 'https://social.yahooapis.com/vi'
-
-		result = self.run_query(
-			"select * from social.profile where guid = me"
-		)
-
+		guid = self.oauthapp.token.yahoo_guid
 		try:
-			manager = Manager.objects.get(yahoo_guid=result['profile']['guid'])
+			manager = Manager.objects.get(yahoo_guid=guid)
+			manager.user = user
 		except Manager.DoesNotExist:
-			for email in result['profile']['emails']:
-				if email['is_primary'] == 'true':			
-					manager = Manager.create(
-						yahoo_guid=result['profile']['guid'],
-						email=email['handle'],
-						user=user
-					)
-					manager.save()
-					break;
+			manager = Manager.create(
+				yahoo_guid=guid,
+				email=user.email,
+				user=user
+			)
 
+		manager.save()
 		return manager
-
-	def foo(self):
-		yahoo.application.SOCIAL_API_URL = 'https://social.yahooapis.com/vi'
-		profile = self.oauthapp.getProfile()
-		if not profile:
-			return yahoo.application.SOCIAL_API_URL
 
 	def run_query(self, query):
 		if self.oauthapp.token is None:
