@@ -31,8 +31,9 @@
 }
 
 .register-link {
-    color: #69edf6;
+    color: white;
     font-size: 25px;
+    font-weight: 200;
 }
 
 .register-link:hover{
