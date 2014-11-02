@@ -24,6 +24,7 @@ class Message(models.Model):
 	UNEQUAL_PICKS = "Trades cannot involve an unequal number of picks"
 	EMPTY_TRADE = "Trades cannot be empty"
 	PASSWORD_CHANGED = "Your password has been successfully changed"
+	USERNAME_TAKEN = "That username is already taken. Try again, bruh."
 
 	def __unicode__(self):
 		return self.text

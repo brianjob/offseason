@@ -82,3 +82,4 @@ msg9 = Message.objects.get_or_create(message_type=mt1, text=Message.VOTE_SUCCESS
 msg10 = Message.objects.get_or_create(message_type=mt2, text=Message.UNEQUAL_PICKS)
 msg11 = Message.objects.get_or_create(message_type=mt2, text=Message.EMPTY_TRADE)
 msg12 = Message.objects.get_or_create(message_type=mt1, text=Message.PASSWORD_CHANGED)
+msg13 = Message.objects.get_or_create(message_type=mt2, text=Message.USERNAME_TAKEN)
