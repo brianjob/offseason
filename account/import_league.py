@@ -78,7 +78,7 @@ class League_Import(object):
 				except KeyError:
 					email = ''
 
-				manager = Manager.create(
+				manager = Manager(
 					yahoo_guid = guid,
 					email=email
 				)
@@ -128,7 +128,7 @@ class League_Import(object):
 			manager = Manager.objects.get(yahoo_guid=guid)
 			manager.user = user
 		except Manager.DoesNotExist:
-			manager = Manager.create(
+			manager = Manager(
 				yahoo_guid=guid,
 				email=user.email,
 				user=user
