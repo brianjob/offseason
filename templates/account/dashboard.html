@@ -3,6 +3,17 @@
 
 {% block content %}
 	<div class="container">
+		<div class="row">
+			{% if error_msg %}
+				<div class="alert alert-danger">{{error_msg}}</div>
+			{% endif %}
+			{% if success_msg %}
+				<div class="alert alert-success">{{success_msg}}</div>
+			{% endif %}
+			{% if info_msg %}
+				<div class="alert alert-info">{{info_msg}}</div>
+			{% endif %}
+		</div>
 		<table class="table">
 			<thead><th>Team</th><th>League</th></thead>
 			<tbody>

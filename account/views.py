@@ -26,7 +26,7 @@ def register(request):
 	user = authenticate(username=email, password=password)
 	login(request, user)
 
-	return HttpResponseRedirect(reverse('dashboard'))
+	return HttpResponseRedirect(reverse('account:link_profile'))
 
 @login_required
 def new_league(request):
@@ -53,14 +53,29 @@ def import_league_callback(request):
 
 @login_required
 def link_profile(request):
+	if request.user.manager:
+		msg = "Your account is already linked to a Yahoo fantasy profile"
+		return render(request, 'account/dashboard.html',
+			{'info_msg' : msg})
+
 	li = League_Import(LINK_PROFILE_CALLBACK)
+
+	request.session['request_token'] = li.get_request_token_str()
 
 	return HttpResponseRedirect(li.get_authorization_url())
 
 @login_required
 def link_profile_callback(request):
+	li = League_Import(LINK_PROFILE_CALLBACK,
+		request.session['request_token'], request.GET['oauth_verifier'])
+
+	manager = li.get_or_create_manager()
+
+	manager.user = request.user
+	manager.save()
+
 	msg = 'Profile successfully Linked'
-	return render(request, 'account/dashboard.html', {'msg' : msg})
+	return render(request, 'account/dashboard.html', {'success_msg' : msg})
 
 @login_required
 def configure_invites(request, league_id):
