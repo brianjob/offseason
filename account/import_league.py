@@ -123,6 +123,9 @@ class League_Import(object):
 			pick.save()
 
 	def get_or_create_manager(self):
+		# social api needs SSL so change url to reflect that
+		yahoo.application.SOCIAL_API_URL = 'https://social.yahooapis.com/vi'
+
 		result = self.run_query(
 			"select * from social.profile where guid = me"
 		)
