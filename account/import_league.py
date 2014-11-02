@@ -4,9 +4,9 @@ from django.utils import timezone
 from trades.models import Player, Team, Manager, Pick, League
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
-CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
-CONSUMER_SECRET   = '172cc969032d0d62e4312932729536fc9d149df8'
-APPLICATION_ID    = 'etzuu634'
+CONSUMER_KEY      = 'dj0yJmk9UTVBWVJVSk9kdG55JmQ9WVdrOVdFVlJSVkphTkdjbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Mg----'
+CONSUMER_SECRET   = 'e553c0405eb0b1500afd891c159f7dd1dc634712'
+APPLICATION_ID    = 'XEQERZ4g'
 
 
 class League_Import(object):
