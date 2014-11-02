@@ -17,7 +17,7 @@ class League_Import(object):
 			self.request_token = yahoo.oauth.RequestToken.from_string(request_token_str)
 			self.oauthapp.token  = self.oauthapp.get_access_token(self.request_token, verifier)
 		else:
-			self.request_token = self.oauthapp.get_request_token(CALLBACK_URL)
+			self.request_token = self.oauthapp.get_request_token(callback_url)
 
 	def get_request_token_str(self):
 		return self.request_token.to_string()
@@ -80,8 +80,7 @@ class League_Import(object):
 
 				manager = Manager.create(
 					yahoo_guid = guid,
-					email=email,
-					code=uuid.uuid4()
+					email=email
 				)
 
 				manager.save()

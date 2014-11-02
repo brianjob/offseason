@@ -16,8 +16,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login$', 'django.contrib.auth.views.login', name='login'),
     url(r'^logout$', 'django.contrib.auth.views.logout', {'template_name': 'registration/login.html'}),
-    url(r'^$', 'account.views.dashboard'),
+    url(r'^$', 'account.views.dashboard', name='dashboard'),
     url(r'^changepassword$', 'django.contrib.auth.views.password_change'),
-    url(r'^password_change_done$', 'offseason.views.password_change_done', name='password_change_done'),
-    url(r'^accounts/profile/$', 'account.views.dashboard')
+    url(r'^password_change_done$', 'offseason.views.password_change_done', name='password_change_done')
 )

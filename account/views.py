@@ -18,16 +18,15 @@ def register_page(request):
 	return render(request, 'account/register.html')
 
 def register(request):
-	user = User.objects.create_user(
-		request.POST['email'],
-		request.POST['email'],
-		request.POST['password'],
-	)
+	email = request.POST['email']
+	password = request.POST['password']
 
-	user = authenticate(username=user.username, password=user.password)
+	User.objects.create_user(email, email, password)
+
+	user = authenticate(username=email, password=password)
 	login(request, user)
 
-	return HttpResponseRedirect(reverse('account:dashboard'))
+	return HttpResponseRedirect(reverse('dashboard'))
 
 @login_required
 def new_league(request):
@@ -51,6 +50,17 @@ def import_league_callback(request):
 	profile = ", ".join(no_email_managers)
 
 	return render(request, 'account/debug.html', { 'profile' : profile })
+
+@login_required
+def link_profile(request):
+	li = League_Import(LINK_PROFILE_CALLBACK)
+
+	return HttpResponseRedirect(li.get_authorization_url())
+
+@login_required
+def link_profile_callback(request):
+	msg = 'Profile successfully Linked'
+	return render(request, 'account/dashboard.html', {'msg' : msg})
 
 @login_required
 def configure_invites(request, league_id):
