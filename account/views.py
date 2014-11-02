@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from account.import_league import League_Import
 from django.http import HttpResponseRedirect
-from trades.models import League
+from trades.models import League, Manager
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
@@ -53,7 +53,7 @@ def import_league_callback(request):
 
 @login_required
 def link_profile(request):
-	if request.user.manager:
+	if Manager.objects.filter(user=request.user).exists():
 		msg = "Your account is already linked to a Yahoo fantasy profile"
 		return render(request, 'account/dashboard.html',
 			{'info_msg' : msg})
