@@ -45,11 +45,10 @@ def import_league_callback(request):
 	li = League_Import(IMPORT_LEAGUE_CALLBACK,
 		request.session['request_token'], request.GET['oauth_verifier'])
 
-	no_email_managers = li.import_league(league_id, request.user.manager)
-
-	profile = ", ".join(no_email_managers)
-
-	return render(request, 'account/debug.html', { 'profile' : profile })
+	league = li.import_league(league_id, request.user.manager)
+	commish_team = Team.objects.filter(league=league).get(manager=league.commissioner)
+	msg = 'Your league has been imported successfully! Your commissioner is: {}'.format(commish_team)
+	return render(request, 'account/dashboard.html', { 'success_msg' : msg })
 
 @login_required
 def link_profile(request):

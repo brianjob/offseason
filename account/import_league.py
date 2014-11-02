@@ -117,6 +117,8 @@ class League_Import(object):
 
 		self.fill_league(league)
 
+		return league
+
 	def add_picks(self, team, year):
 		for rd in range(1, 23):
 			pick = Pick(round=rd, year=year, team=team)
