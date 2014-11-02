@@ -145,6 +145,12 @@ class League_Import(object):
 
 		return manager
 
+	def foo(self):
+		yahoo.application.SOCIAL_API_URL = 'https://social.yahooapis.com/vi'
+		profile = self.oauthapp.getProfile()
+		if not profile:
+			return yahoo.application.SOCIAL_API_URL
+
 	def run_query(self, query):
 		if self.oauthapp.token is None:
 			raise Exception('access token not generated')
