@@ -29,3 +29,12 @@
 .form-control {
 	margin-top: 2px;
 }
+
+.register-link {
+    color: #69edf6;
+    font-size: 25px;
+}
+
+.register-link:hover{
+    color: white;
+}

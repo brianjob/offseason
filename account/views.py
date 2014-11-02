@@ -3,10 +3,31 @@ from account.import_league import League_Import
 from django.http import HttpResponseRedirect
 from trades.models import League
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import login, authenticate
+from django.core.urlresolvers import reverse
+
+IMPORT_LEAGUE_CALLBACK = 'http://intense-retreat-2626.herokuapp.com/account/import_league_callback'
+LINK_PROFILE_CALLBACK = 'http://intense-retreat-2626.herokuapp.com/account/link_profile_callback'
 
 @login_required
 def dashboard(request):
 	return render(request, 'account/dashboard.html')
+
+def register_page(request):
+	return render(request, 'account/register.html')
+
+def register(request):
+	user = User.objects.create_user(
+		request.POST['email'],
+		request.POST['email'],
+		request.POST['password'],
+	)
+
+	user = authenticate(username=user.username, password=user.password)
+	login(request, user)
+
+	return HttpResponseRedirect(reverse('account:dashboard'))
 
 @login_required
 def new_league(request):
@@ -14,15 +35,16 @@ def new_league(request):
 
 @login_required
 def import_league(request):
-	li = League_Import()
+	li = League_Import(IMPORT_LEAGUE_CALLBACK)
 	request.session['league_id'] = request.POST['league_id']
 	request.session['request_token'] = li.get_request_token_str()
 	return HttpResponseRedirect(li.get_authorization_url())
 
 @login_required
-def callback(request):
+def import_league_callback(request):
 	league_id=request.session['league_id']
-	li = League_Import(request.session['request_token'], request.GET['oauth_verifier'])
+	li = League_Import(IMPORT_LEAGUE_CALLBACK,
+		request.session['request_token'], request.GET['oauth_verifier'])
 
 	no_email_managers = li.import_league(league_id, request.user.manager)
 

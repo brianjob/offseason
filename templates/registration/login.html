@@ -10,7 +10,7 @@
 			The simple way to trade all year long.
 		</div>
 	</div>
-	<div class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4" >
+	<div class="text-center col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4" >
 		{% if form.errors %}
 		<p>Your username and password didn't match. Please try again.</p>
 		{% endif %}
@@ -21,6 +21,7 @@
 				<input type="submit" value="Login" class="btn btn-primary form-control"/>
 				<input type="hidden" name="next" value="{{ next }}" />
 		</form>
+		<a class="register-link" href="{% url 'account:register_page' %}">Not Registered? Sign Up.</a>
 	</div>
 </div>
 

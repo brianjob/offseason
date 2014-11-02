@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 class Manager(models.Model):
 	yahoo_guid = models.CharField(max_length=200)
@@ -9,6 +10,15 @@ class Manager(models.Model):
 
 	def __unicode__(self):
 		return self.email
+
+	@classmethod
+	def create(yahoo_guid, email, user=None):
+		return Manager(
+			code=uuid.uuid4(),
+			yahoo_guid=yahoo_guid,
+			email=email,
+			user=user
+		)
 
 class League(models.Model):
 	name = models.CharField(max_length=200)

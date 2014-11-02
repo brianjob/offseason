@@ -2,18 +2,16 @@ import yahoo.application
 import yahoo.oauth
 from django.utils import timezone
 from trades.models import Player, Team, Manager, Pick, League
-import uuid
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = 'dj0yJmk9Rm11YUJIWGdTcElOJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD01MQ--'
 CONSUMER_SECRET   = '172cc969032d0d62e4312932729536fc9d149df8'
 APPLICATION_ID    = 'etzuu634'
-CALLBACK_URL      = 'http://intense-retreat-2626.herokuapp.com/account/callback'
 
 
 class League_Import(object):
-	def __init__(self, request_token_str=None, verifier=None):
-		self.oauthapp = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, CALLBACK_URL)
+	def __init__(self, callback_url, request_token_str=None, verifier=None):
+		self.oauthapp = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, callback_url)
 
 		if request_token_str is not None and verifier is not None:
 			self.request_token = yahoo.oauth.RequestToken.from_string(request_token_str)
@@ -80,10 +78,10 @@ class League_Import(object):
 				except KeyError:
 					email = ''
 
-				manager = Manager(
+				manager = Manager.create(
 					yahoo_guid = guid,
-					code=uuid.uuid4(),
-					email=email
+					email=email,
+					code=uuid.uuid4()
 				)
 
 				manager.save()
@@ -124,6 +122,24 @@ class League_Import(object):
 		for rd in range(1, 23):
 			pick = Pick(round=rd, year=year, team=team)
 			pick.save()
+
+	def get_or_create_manager(self):
+		result = self.run_query(
+			"select * from social.profile where guid = me"
+		)
+
+		try:
+			manager = Manager.objects.get(yahoo_guid=result['profile']['guid'])
+		except Manager.DoesNotExist:
+			for email in result['profile']['emails']:
+				if email['is_primary'] == 'true':			
+					manager = Manager.create(
+						yahoo_guid=result['profile']['guid'],
+						email=email['handle']
+					)
+					break;
+
+		return manager
 
 	def run_query(self, query):
 		if self.oauthapp.token is None:
