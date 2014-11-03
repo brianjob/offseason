@@ -17,9 +17,6 @@ def dashboard(request):
 def register_page(request):
 	return render(request, 'account/register.html')
 
-def register(request):
-	return HttpResponseRedirect(reverse('account:link_profile'))
-
 @login_required
 def new_league(request):
 	return render(request, 'account/new_league.html')
