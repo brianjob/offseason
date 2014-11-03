@@ -40,11 +40,6 @@ def import_league_callback(request):
 	return render(request, 'account/dashboard.html', { 'success_msg' : msg })
 
 def link_profile(request):
-	if Manager.objects.filter(user=request.user).exists():
-		msg = "Your account is already linked to a Yahoo fantasy profile"
-		return render(request, 'account/dashboard.html',
-			{'info_msg' : msg})
-
 	li = League_Import(LINK_PROFILE_CALLBACK)
 
 	request.session['request_token'] = li.get_request_token_str()
