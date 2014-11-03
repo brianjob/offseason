@@ -82,7 +82,7 @@ def link_profile_callback(request):
 		user.delete()
 		return HttpResponseRedirect(reverse('account:register'))
 
-	return HttpResponseRedirect(reverse('account:dashboard.html'))
+	return HttpResponseRedirect(reverse('account:dashboard'))
 
 @login_required
 def configure_invites(request, league_id):
