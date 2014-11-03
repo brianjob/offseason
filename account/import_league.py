@@ -5,7 +5,7 @@ from trades.models import Player, Team, Manager, Pick, League
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = 'dj0yJmk9S3RIN0ZsYlY1Q0pvJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD04MA--'
-CONSUMER_SECRET   = '065a1dae69283d6359a8b9b38f71b8837f6dc4d0'
+CONSUMER_SECRET   = '2705a1d5cd255ccbcd67cdc3e7a7501ac8ada454'
 APPLICATION_ID    = 'etzuu634'
 
 
