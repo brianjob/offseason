@@ -211,31 +211,31 @@ def trade(request, trade_id):
 							  't2_picks' : t2_picks})
 @login_required
 def inbox(request):
-	trades = Trade.objects.filter(team2_in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
+	trades = Trade.objects.filter(team2__in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
 	return render(request, 'trades/tradelist.html', { 'trades' : trades })
 
 @login_required
 def outbox(request):
-	trades = Trade.objects.filter(team1_in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
+	trades = Trade.objects.filter(team1__in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
 	return render(request, 'trades/tradelist.html',	{ 'trades' : trades })
 
 @login_required
 def drafts(request):
-	trades = Trade.objects.filter(team1_in=request.user.manager.team_set.all()).filter(proposed_date=None)
+	trades = Trade.objects.filter(team1__in=request.user.manager.team_set.all()).filter(proposed_date=None)
 	return render(request, 'trades/tradelist.html', { 'trades': trades })
 
 @login_required
 def pending(request):
-	trades = Trade.objects.filter(Q(team1_in=request.user.manager.team_set.all()) | Q(team2_in=request.user.manager.team_set.all())).exclude(accepted_date=None).filter(completed_date=None)
+	trades = Trade.objects.filter(Q(team1__in=request.user.manager.team_set.all()) | Q(team2__in=request.user.manager.team_set.all())).exclude(accepted_date=None).filter(completed_date=None)
 	return render(request, 'trades/tradelist.html', {'trades' : trades })
 
 @login_required
 def my_trans(request):
-	trades = Trade.objects.filter(Q(team1_in=request.user.manager.team_set.all()) | Q(team2_in=request.user.manager.team_set.all()))
+	trades = Trade.objects.filter(Q(team1__in=request.user.manager.team_set.all()) | Q(team2__in=request.user.manager.team_set.all()))
 	return render(request, 'trades/tradelist.html', {'trades' : trades })
 
 @login_required
 def league_trans(request):
-	trades = Trade.objects.filter(team1__league_in=[t.league for t in request.user.manager.team_set.all()]).exclude(completed_date=None)
+	trades = Trade.objects.filter(team1__league__in=[t.league for t in request.user.manager.team_set.all()]).exclude(completed_date=None)
 	return render(request, 'trades/tradelist.html', {'trades' : trades })
 

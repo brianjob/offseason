@@ -69,6 +69,8 @@ def link_profile_callback(request):
 	password = request.session['password']
 	request.session['password'] = ''
 
+	print 'creating user -- login: {}, password: {}'.format(email, password)
+
 	User.objects.create_user(email, email, password)
 	user = authenticate(username=email, password=password)
 	login(request, user)

@@ -127,8 +127,7 @@ class League_Import(object):
 	def get_or_create_manager(self, user):
 		guid = self.oauthapp.token.yahoo_guid
 		try:
-			manager = Manager.objects.get(yahoo_guid=guid)
-			manager.user = user
+			return Manager.objects.get(yahoo_guid=guid)
 		except Manager.DoesNotExist:
 			manager = Manager(
 				yahoo_guid=guid,

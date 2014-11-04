@@ -5,7 +5,7 @@ from django.db.models.signals import post_init
 
 class Manager(models.Model):
 	yahoo_guid = models.CharField(max_length=200)
-	user = models.OneToOneField(User, null = True)
+	user = models.OneToOneField(User)
 	code = models.CharField(max_length=200)
 	email = models.CharField(max_length=200)
 

@@ -1,3 +1,4 @@
+{% load url from future %}
 {% extends "base.html" %}
 
 {% block content %}
@@ -10,11 +11,11 @@
 		<table class="table">
 			{% for team in league.team_set.all %}
 				<tr>
-					<td><a href="/trades/team/{{team.pk}}">{{team.name}}</a></td>
+					<td><a href="{% url 'trades:team' team.pk %}">{{team.name}}</a></td>
 				{% if request.user.manager.id == team.manager.id %}
 					<td></td>
 				{% else %}
-					<td><a class="btn btn-primary btn-sm" href="/trades/newtrade/{{team.pk}}">propose trade</a></td>
+					<td><a class="btn btn-primary btn-sm" href="{% trades:newtrade team.pk %}">propose trade</a></td>
 				{% endif %}
 				</tr>
 			{% endfor %}
