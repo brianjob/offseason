@@ -2,6 +2,8 @@ import yahoo.application
 import yahoo.oauth
 from django.utils import timezone
 from trades.models import Player, Team, Manager, Pick, League
+from django.contrib.auth.models import User
+import uuid
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = 'dj0yJmk9S3RIN0ZsYlY1Q0pvJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD04MA--'
@@ -75,16 +77,15 @@ class League_Import(object):
 			except Manager.DoesNotExist:
 				try:
 					email = team['managers']['manager']['email']
+					username = email
 				except KeyError:
 					email = ''
+					username = guid
 
-				manager = Manager(
-					yahoo_guid = guid,
-					email=email
-				)
-
-				manager.save()
-
+					# give the user a random unique pw and they can change it later
+				user = User.objects.create_user(username, email, uuid.uuid4())
+				manager = Manager(yahoo_guid=guid, user=user)
+				
 			t = Team(
 				name=team['name'],
 				league=league,
@@ -124,19 +125,8 @@ class League_Import(object):
 			pick = Pick(round=rd, year=year, team=team)
 			pick.save()
 
-	def get_or_create_manager(self, user):
-		guid = self.oauthapp.token.yahoo_guid
-		try:
-			return Manager.objects.get(yahoo_guid=guid)
-		except Manager.DoesNotExist:
-			manager = Manager(
-				yahoo_guid=guid,
-				email=user.email,
-				user=user
-			)
-
-		manager.save()
-		return manager
+	def get_current_user_guid():
+		return self.oauthapp.token.yahoo_guid
 
 	def run_query(self, query):
 		if self.oauthapp.token is None:

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+	<div class="alert alert-success">
+		Your league was imported successfully.
+	</div>
+	<div class="alert alert-warning">
+		Some managers in your league could not have their emails pulled from yahoo. 
+		You will have to fill these emails in to continue. Not that failing to provide accurate emails will prevent these managers from participating.
+	</div>
+	<form action="{% url account:submit_emails %}" method="post">
+	{% for manager in need_emails %}
+	 	<div class="form-group">
+    		<label for="guid-{{manager.yahoo_guid}}" class="col-sm-2 control-label">Email</label>
+    		<div class="col-sm-10">
+      		<input name="guid-{{manager.yahoo_guid}}" type="email" class="form-control" id="guid-{{manager.yahoo_guid}}" placeholder="Email">
+    	</div>
+	{% endfor %}
+	<input type="submit" value="Submit" />
+	</form>
+</div>
+{% endblock %}

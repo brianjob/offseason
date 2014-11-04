@@ -1,22 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
-from django.db.models.signals import post_init
 
 class Manager(models.Model):
 	yahoo_guid = models.CharField(max_length=200)
 	user = models.OneToOneField(User)
-	code = models.CharField(max_length=200)
-	email = models.CharField(max_length=200)
 
 	def __unicode__(self):
 		return self.email
-
-def addCode(**kwargs):
-	instance = kwargs.get('instance')
-	instance.code=uuid.uuid4()
-
-post_init.connect(addCode, Manager)
 
 class League(models.Model):
 	name = models.CharField(max_length=200)
