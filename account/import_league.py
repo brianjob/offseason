@@ -125,7 +125,7 @@ class League_Import(object):
 			pick = Pick(round=rd, year=year, team=team)
 			pick.save()
 
-	def get_current_user_guid():
+	def get_current_user_guid(self):
 		return self.oauthapp.token.yahoo_guid
 
 	def run_query(self, query):
