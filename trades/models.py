@@ -6,7 +6,7 @@ class Manager(models.Model):
 	user = models.OneToOneField(User)
 
 	def __unicode__(self):
-		return self.email
+		return self.user.username
 
 class League(models.Model):
 	name = models.CharField(max_length=200)
