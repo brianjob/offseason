@@ -93,6 +93,7 @@ class League_Import(object):
 				manager=manager
 			)
 
+			print 'creating team: {}'.format(t.name)
 			t.save()
 
 			self.fill_roster(t)
@@ -114,6 +115,7 @@ class League_Import(object):
 			commissioner=commissioner
 		)
 
+		print 'creating league: {}'.format(league.name)
 		league.save()
 
 		self.fill_league(league)
