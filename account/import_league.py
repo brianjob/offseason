@@ -172,3 +172,7 @@ class League_Import(object):
 			raise Exception('YQL query failed with error: "%s".' % response['error']['description'])
 		else:
 			raise Exception('YQL response malformed.')
+
+def import_worker(callback, request_token, oauth_verifier, league_id, manager):
+	li = League_Import(callback, request_token, oauth_verifier)
+	li.import_league(league_id, manager)
