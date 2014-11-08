@@ -56,7 +56,7 @@ def login_callback(request):
 		manager = Manager.objects.get(yahoo_guid=guid)
 		user = authenticate(username=manager.user.username, password=manager.user.password)
 		login(request, user)
-	except Manager.DoesNotExists:
+	except Manager.DoesNotExist:
 		username = guid,
 		password = uuid.uuid4()
 		print 'creating user -- login: {}, password: {}'.format(username, password)
