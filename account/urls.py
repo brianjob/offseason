@@ -11,5 +11,6 @@ urlpatterns = patterns('account.views',
 #    url(r'^register$', views.register, name='register'),
  #   url(r'^link_profile_callback$', views.link_profile_callback, name='link_profile_callback'),
     url(r'^dashboard$', views.dashboard, name='dashboard'),
+    url(r'^login', views.login_user, name='login'),
     url(r'^login_callback$', views.login_callback, name='login_callback')
 )
