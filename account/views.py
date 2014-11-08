@@ -6,10 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.core.urlresolvers import reverse
-from offseason.models import Message
+import uuid
 
-IMPORT_LEAGUE_CALLBACK = 'http://intense-retreat-2626.herokuapp.com/account/import_league_callback'
-LINK_PROFILE_CALLBACK = 'http://intense-retreat-2626.herokuapp.com/account/link_profile_callback'
+IMPORT_LEAGUE_CALLBACK = 'http://offseason-trade.herokuapp.com/account/import_league_callback'
+LINK_PROFILE_CALLBACK = 'http://offseason-trade.herokuapp.com/account/link_profile_callback'
+LOGIN_CALLBACK = 'http://offseason-trade.herokuapp.com/account/login_callback'
 
 def verify(request):
 	return HttpResponse('hi');
@@ -18,26 +19,54 @@ def verify(request):
 def dashboard(request):
 	return render(request, 'account/dashboard.html')
 
-def register_page(request):
-	return render(request, 'account/register.html')
+# def register_page(request):
+# 	return render(request, 'account/register.html')
 
-def register(request):
-	email = request.POST['email']
-	password = request.POST['password']
+# def register(request):
+# 	email = request.POST['email']
+# 	password = request.POST['password']
 
-	#check if username exists
-	if User.objects.filter(username=email).exists():
-		msg = Message.objects.get(text=Message.USERNAME_TAKEN)
-		HttpResponseRedirect(reverse('account:register_page') + '?msg=' + str(msg.id))
+# 	#check if username exists
+# 	if User.objects.filter(username=email).exists():
+# 		msg = Message.objects.get(text=Message.USERNAME_TAKEN)
+# 		HttpResponseRedirect(reverse('account:register_page') + '?msg=' + str(msg.id))
 
-	request.session['email'] = email
-	request.session['password'] = password
+# 	request.session['email'] = email
+# 	request.session['password'] = password
 
-	li = League_Import(LINK_PROFILE_CALLBACK)
+# 	li = League_Import(LINK_PROFILE_CALLBACK)
+
+# 	request.session['request_token'] = li.get_request_token_str()
+
+# 	return HttpResponseRedirect(li.get_authorization_url())
+
+def login_user(request):
+	li = League_Import(LOGIN_CALLBACK)
 
 	request.session['request_token'] = li.get_request_token_str()
 
 	return HttpResponseRedirect(li.get_authorization_url())
+
+def login_callback(request):
+	li = League_Import(LOGIN_CALLBACK,
+		request.session['request_token'], request.GET['oauth_verifier'])
+
+	guid=li.get_current_user_guid()
+	try:
+		manager = Manager.objects.get(yahoo_guid=guid)
+		user = authenticate(username=manager.user.username, password=manager.user.password)
+		login(request, user)
+	except Manager.DoesNotExists:
+		username = guid,
+		password = uuid.uuid4()
+		print 'creating user -- login: {}, password: {}'.format(username, password)
+		User.objects.create_user(username, '', password)
+		user = authenticate(username=username, password=password)
+		login(request, user)
+		manager = Manager.objects.create(yahoo_guid=guid, user=user)
+		manager.save()
+
+	return HttpResponseRedirect(reverse('account:dashboard'))
 
 @login_required
 def new_league(request):
@@ -67,29 +96,28 @@ def import_league_callback(request):
 
 	return HttpResponseRedirect(reverse('trades:league', args=[league.id]))
 
-def link_profile_callback(request):
-	li = League_Import(LINK_PROFILE_CALLBACK,
-		request.session['request_token'], request.GET['oauth_verifier'])
+# def link_profile_callback(request):
+# 	email = request.session['email']
+# 	password = request.session['password']
+# 	request.session['password'] = ''
 
-	guid=li.get_current_user_guid()
-	if Manager.objects.filter(yahoo_guid=guid).exists():
-		# eventually display message
-		return HttpResponseRedirect(reverse('login'))
+# 	li = League_Import(LINK_PROFILE_CALLBACK,
+# 		request.session['request_token'], request.GET['oauth_verifier'])
 
-	email = request.session['email']
-	password = request.session['password']
-	request.session['password'] = ''
+# 	guid=li.get_current_user_guid()
+# 	manager = Manager.objects.filter(yahoo_guid=guid)
+# 			# user has an account created by a league import, but has never signed in
 
-	print 'creating user -- login: {}, password: {}'.format(email, password)
+# 	print 'creating user -- login: {}, password: {}'.format(email, password)
 
-	User.objects.create_user(email, email, password)
-	user = authenticate(username=email, password=password)
-	login(request, user)
+# 	User.objects.create_user(email, email, password)
+# 	user = authenticate(username=email, password=password)
+# 	login(request, user)
 
-	manager = Manager.objects.create(yahoo_guid=guid, user=user)
-	manager.save()
+# 	manager = Manager.objects.create(yahoo_guid=guid, user=user)
+# 	manager.save()
 
-	return HttpResponseRedirect(reverse('account:dashboard'))
+# 	return HttpResponseRedirect(reverse('account:dashboard'))
 
 @login_required
 def configure_invites(request, league_id):

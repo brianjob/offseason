@@ -8,7 +8,8 @@ urlpatterns = patterns('account.views',
     url(r'^newleague$', views.new_league, name='new_league'),
     url(r'^configureinvites$', views.configure_invites, name='configure_invites'),
     url(r'^signup$', views.register_page, name='register_page'),
-    url(r'^register$', views.register, name='register'),
-    url(r'^link_profile_callback$', views.link_profile_callback, name='link_profile_callback'),
-    url(r'^dashboard$', views.dashboard, name='dashboard')
+#    url(r'^register$', views.register, name='register'),
+ #   url(r'^link_profile_callback$', views.link_profile_callback, name='link_profile_callback'),
+    url(r'^dashboard$', views.dashboard, name='dashboard'),
+    url(r'^login_callback$', views.login_callback, name='login_callback')
 )

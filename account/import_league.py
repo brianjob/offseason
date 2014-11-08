@@ -6,9 +6,9 @@ from django.contrib.auth.models import User
 import uuid
 	
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
-CONSUMER_KEY      = 'dj0yJmk9S3RIN0ZsYlY1Q0pvJmQ9WVdrOVpYUjZkWFUyTXpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD04MA--'
-CONSUMER_SECRET   = '2705a1d5cd255ccbcd67cdc3e7a7501ac8ada454'
-APPLICATION_ID    = 'etzuu634'
+CONSUMER_KEY      = 'dj0yJmk9NWdNVWRYWngwaUF5JmQ9WVdrOU1HcFpjRGt6Tm5VbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1iZA--'
+CONSUMER_SECRET   = '2cc6e94d26c4a943ce7c13a47deb65f4b73f5e02'
+APPLICATION_ID    = '0jYp936u'
 
 
 class League_Import(object):
