@@ -1,1 +1,1 @@
-web: gunicorn offseason.wsgi --log-file --timeout 90 -
+web: gunicorn offseason.wsgi --timeout 90 --log-file -
