@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from account.import_league import League_Import
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from trades.models import League, Manager
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -10,6 +10,9 @@ from offseason.models import Message
 
 IMPORT_LEAGUE_CALLBACK = 'http://intense-retreat-2626.herokuapp.com/account/import_league_callback'
 LINK_PROFILE_CALLBACK = 'http://intense-retreat-2626.herokuapp.com/account/link_profile_callback'
+
+def verify(request):
+	return HttpResponse('hi');
 
 @login_required
 def dashboard(request):
