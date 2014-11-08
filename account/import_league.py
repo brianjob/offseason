@@ -52,6 +52,10 @@ class League_Import(object):
 			.format(team_key, date.strftime("%Y-%m-%d"))
 		)['team']
 
+		#remove all players from team first so no duplicates
+		for player in team.player_set.all():
+			player.delete()
+
 		for player in team_result['roster']['players']['player']:
 			p = Player(
 				name=player['name']['full'],
@@ -90,17 +94,22 @@ class League_Import(object):
 				user = User.objects.create_user(username, email, uuid.uuid4())
 				manager = Manager(yahoo_guid=guid, user=user)
 				manager.save()
-				
-			t = Team(
-				name=team['name'],
-				league=league,
-				yahoo_id=team['team_id'],
-				manager=manager
-			)
+			
+			try:
+				t = Team.objects.filter(league=league).get(yahoo_id=team['team_id'])
+				t.name = team['name']
 
-			print 'creating team: {}'.format(t.name)
+			except Team.DoesNotExist:
+				t = Team(
+					name=team['name'],
+					league=league,
+					yahoo_id=team['team_id'],
+					manager=manager
+				)
+
+				print 'creating team: {}'.format(t.name)
+
 			t.save()
-
 			self.fill_roster(t)
 
 			if team['managers']['manager'].has_key('is_commissioner') and team['managers']['manager']['is_commissioner'] == "1":
