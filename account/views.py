@@ -58,11 +58,10 @@ def login_callback(request):
 		user = authenticate(username=manager.user.username, password=manager.user.password)
 		login(request, user)
 	except Manager.DoesNotExist:
-		username = guid,
-		password = uuid.uuid4()
-		print 'creating user -- login: {}, password: {}'.format(username, password)
-		User.objects.create_user(username, '', password)
-		user = authenticate(username=username, password=password)
+		password = str(uuid.uuid4())
+		print 'creating user -- login: {}, password: {}'.format(guid, password)
+		User.objects.create_user(guid, '', password)
+		user = authenticate(username=guid, password=password)
 		login(request, user)
 		manager = Manager.objects.create(yahoo_guid=guid, user=user)
 		manager.save()
