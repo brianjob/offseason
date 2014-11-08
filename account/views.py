@@ -62,6 +62,8 @@ def import_league_callback(request):
 			{'league' : league ,
 			'need_emails': need_emails } )
 
+	return HttpResponseRedirect(reverse('trades:league', args=[league.id]))
+
 def link_profile_callback(request):
 	li = League_Import(LINK_PROFILE_CALLBACK,
 		request.session['request_token'], request.GET['oauth_verifier'])
