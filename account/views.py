@@ -48,6 +48,7 @@ def login_user(request):
 	return HttpResponseRedirect(li.get_authorization_url())
 
 def login_callback(request):
+	print 'login callback!!'
 	li = League_Import(LOGIN_CALLBACK,
 		request.session['request_token'], request.GET['oauth_verifier'])
 
@@ -66,7 +67,7 @@ def login_callback(request):
 		manager = Manager.objects.create(yahoo_guid=guid, user=user)
 		manager.save()
 
-	return HttpResponseRedirect(reverse('account:dashboard'))
+	return HttpResponse('account:dashboard')
 
 @login_required
 def new_league(request):
