@@ -50,10 +50,21 @@ class League_Import(object):
 		elif date.month > 10:
 			date = date.replace(month=10)
 
-		team_result = self.run_query(
-			"select * from fantasysports.teams.roster where team_key='{}' and date='{}'"
-			.format(team_key, date.strftime("%Y-%m-%d"))
-		)['team']
+		date_str = date.strftime("%Y-%m-%d")
+
+		result = None
+		counter = 0
+		while(result is None and counter < 10):
+			result = self.run_query(
+				"select * from fantasysports.teams.roster where team_key='{}' and date='{}'"
+				.format(team_key, date_str)
+			)
+			counter += 1
+
+		if result is None:
+			raise Exception("could not fetch roster for {}".format(team.name))
+
+		team_result = result['team']
 
 		#remove all players from team first so no duplicates
 		for player in team.player_set.all():
