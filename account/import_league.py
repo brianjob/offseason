@@ -45,7 +45,7 @@ class League_Import(object):
 		team_key = self.get_team_key(team.league.yahoo_id, team.yahoo_id)
 		date = timezone.now()
 		if date.month < 4 or date.month > 10:
-			date.month = 10
+			date.replace(month=10)
 
 		team_result = self.run_query(
 			"select * from fantasysports.teams.roster where team_key='{}' and date='{}'"
