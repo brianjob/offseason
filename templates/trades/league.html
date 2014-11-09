@@ -3,6 +3,9 @@
 
 {% block content %}
 <div class="container">
+	{{request.user}}
+	{{request.user.manager}}
+	{{request.user.manager.id}}
 	<div class="row">
 		<h2>{{league.name}}</h2>
 		{% if msg %}
