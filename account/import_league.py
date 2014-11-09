@@ -45,7 +45,7 @@ class League_Import(object):
 	def get_num_picks(self, league):
 		result = self.run_query(
 			"select * from fantasysports.leagues.settings where league_key='{}'"
-			.format(league.league_key))
+			.format(league.yahoo_id))
 
 		tot = 0
 		for pos in result['league']['settings']['roster_positions']['roster_position']:
