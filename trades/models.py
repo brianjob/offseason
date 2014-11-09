@@ -17,7 +17,8 @@ class League(models.Model):
 		return self.name
 
 	def pending_trans_cnt(self):
-		Trade.objects.filter(team1__league=self).count()
+		return Trade.objects.filter(team1__league=self).count()
+
 
 class Team(models.Model):
 	name = models.CharField(max_length=50)
