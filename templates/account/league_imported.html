@@ -26,7 +26,7 @@ $(function() {
 
 		}).done(function(data) {
 			data = JSON.parse(data);
-			console.log(data.result);
+			console.log('result: ' + data.result);
 			debugger;
 			if (data.result == 'success') {
 				console.log('good');
@@ -34,8 +34,8 @@ $(function() {
 					'<span class="glyphicon glyphicon-ok" ></span>'
 				);
 			} else {
+				console.log('fail');
 				$(this).children('.result').html(
-					console.log('fail');
 					'<span class="glyphicon glyphicon-remove" ></span>'
 				);
 			}
