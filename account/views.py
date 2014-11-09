@@ -28,7 +28,7 @@ def dashboard(request):
 
 	for t in my_teams:
 		t = {
-		'team' : team,
+		'team' : t,
 		'league' : t.league,
 		'pending' : Trade.objects.filter(team1__league=t.league).count(),
 		'inbox' : t.trades_received.count(),
