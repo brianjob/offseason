@@ -27,11 +27,11 @@ $(function() {
 		}).done(function(data) {
 			if (data.result == 'success') {
 				$(this).children('.result').html(
-					'<span class="icon icon-ok" ></span>'
+					'<span class="glyphicon glyphicon-ok" ></span>'
 				);
 			} else {
 				$(this).children('.result').html(
-					'<span class="icon icon-remove" ></span>'
+					'<span class="glyphicon glyphicon-remove" ></span>'
 				);
 			}
 		});

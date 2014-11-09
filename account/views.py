@@ -7,8 +7,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.core.urlresolvers import reverse
 import uuid
-from rq import Queue
-from worker import conn
 
 IMPORT_LEAGUE_CALLBACK = 'http://offseason-trade.herokuapp.com/account/import_league_callback'
 LINK_PROFILE_CALLBACK = 'http://offseason-trade.herokuapp.com/account/link_profile_callback'
@@ -19,7 +17,7 @@ def verify(request):
 
 @login_required
 def dashboard(request):
-	teams = Team.objects.all(manager=request.user.manager)
+	teams = Team.objects.filter(manager=request.user.manager)
 
 	return render(request, 'account/dashboard.html',
 		{ 'teams' : teams })
