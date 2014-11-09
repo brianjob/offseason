@@ -212,30 +212,42 @@ def trade(request, trade_id):
 @login_required
 def inbox(request):
 	trades = Trade.objects.filter(team2__in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
-	return render(request, 'trades/tradelist.html', { 'trades' : trades })
+	return render(request, 'trades/tradelist.html', 
+		{ 'heading' : 'inbox',
+		  'trades' : trades })
 
 @login_required
 def outbox(request):
 	trades = Trade.objects.filter(team1__in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
-	return render(request, 'trades/tradelist.html',	{ 'trades' : trades })
+	return render(request, 'trades/tradelist.html',	
+		{ 'heading' : 'outbox',
+		  'trades' : trades })
 
 @login_required
 def drafts(request):
 	trades = Trade.objects.filter(team1__in=request.user.manager.team_set.all()).filter(proposed_date=None)
-	return render(request, 'trades/tradelist.html', { 'trades': trades })
+	return render(request, 'trades/tradelist.html', 
+		{ 'heading' : 'drafts',
+		  'trades': trades })
 
 @login_required
 def pending(request):
 	trades = Trade.objects.filter(Q(team1__in=request.user.manager.team_set.all()) | Q(team2__in=request.user.manager.team_set.all())).exclude(accepted_date=None).filter(completed_date=None)
-	return render(request, 'trades/tradelist.html', {'trades' : trades })
+	return render(request, 'trades/tradelist.html', 
+		{ 'heading' : 'pending transactions',
+		 'trades' : trades })
 
 @login_required
 def my_trans(request):
 	trades = Trade.objects.filter(Q(team1__in=request.user.manager.team_set.all()) | Q(team2__in=request.user.manager.team_set.all()))
-	return render(request, 'trades/tradelist.html', {'trades' : trades })
+	return render(request, 'trades/tradelist.html', 
+		{ 'heading' : 'my transactions',
+		 'trades' : trades })
 
 @login_required
 def league_trans(request):
 	trades = Trade.objects.filter(team1__league__in=[t.league for t in request.user.manager.team_set.all()]).exclude(completed_date=None)
-	return render(request, 'trades/tradelist.html', {'trades' : trades })
+	return render(request, 'trades/tradelist.html', 
+		{ 'heading' : 'league_transactions',
+		 'trades' : trades })
 
