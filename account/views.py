@@ -76,7 +76,7 @@ def import_league_callback(request):
 
 	return render(request, 'account/league_imported.html',
 		{ 'league' : league,
-		  'access_token' : li.get_access_token()})
+		  'access_token' : li.get_access_token().to_string()})
 
 @login_required
 def fill_roster(request):
@@ -84,7 +84,7 @@ def fill_roster(request):
 	access_token = request.POST['access_token']
 	team = get_object_or_404(Team, pk=team_id)
 
-	li = League_Import.create_from_access_token(access_token)
+	li = League_Import.create_from_access_token(IMPORT_LEAGUE_CALLBACK, access_token)
 	li.fill_roster(team)
 
 	return HttpResponse("{ result : 'success' }");

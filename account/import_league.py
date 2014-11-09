@@ -12,19 +12,19 @@ APPLICATION_ID    = '0jYp936u'
 
 
 class League_Import(object):
-	def __init__(self, callback_url=None, request_token_str=None, verifier=None):
+	def __init__(self, callback_url, request_token_str=None, verifier=None):
 		self.oauthapp = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, callback_url)
 
 		if request_token_str is not None and verifier is not None:
 			self.request_token = yahoo.oauth.RequestToken.from_string(request_token_str)
 			self.oauthapp.token  = self.oauthapp.get_access_token(self.request_token, verifier)
-		elif callback_url is not None:
+		else:
 			self.request_token = self.oauthapp.get_request_token(callback_url)
 
 	@classmethod
-	def create_from_access_token(cls, access_token):
-		instance = cls()
-		instance.oauthapp.token = access_token
+	def create_from_access_token(cls, callback_url, access_token_str):
+		instance = cls(callback_url)
+		instance.oauthapp.token = yahoo.oauth.AccessToken.from_string(access_token_str)
 		return instance
 
 	def get_request_token_str(self):
