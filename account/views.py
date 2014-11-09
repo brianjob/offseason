@@ -71,7 +71,7 @@ def import_league_callback(request):
 		request_token, oauth_verifier)
 	league = li.import_league(league_id, request.user.manager)
 
-	return render(request, 'league_imported.html',
+	return render(request, 'account/league_imported.html',
 		{ 'league' : league,
 		  'access_token' : li.get_access_token()})
 
