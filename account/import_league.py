@@ -23,7 +23,7 @@ class League_Import(object):
 
 	@classmethod
 	def create_from_access_token(cls, access_token):
-		instance = cls('')
+		instance = cls()
 		instance.oauthapp.token = access_token
 		return instance
 
