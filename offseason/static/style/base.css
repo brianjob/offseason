@@ -43,6 +43,6 @@
     color: white;
 }
 
-.btn-yh {
-    width: 100%;
+.padded-top {
+    margin-top: 60px;
 }
