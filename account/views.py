@@ -44,7 +44,9 @@ def login_callback(request):
 		manager = Manager.objects.get(yahoo_guid=guid)
 		print('USER: {}'.format(manager.user.username))
 		print('PASS: {}'.format(manager.user.password))
-		user = authenticate(username=manager.user.username, password=manager.user.password)
+		user = manager.user
+		# http://stackoverflow.com/questions/2787650/manually-logging-in-a-user-without-password
+		user.backend = 'django.contrib.auth.backends.ModelBackend'
 		login(request, user)
 	except Manager.DoesNotExist:
 		password = str(uuid.uuid4())
