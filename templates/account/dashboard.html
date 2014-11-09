@@ -17,9 +17,9 @@
 		<table class="table">
 			<thead>
 				<th>Team</th><th>League</th>
-				<th class="pull-right">Pending Transactions</th>
-				<th class="pull-right">Inbox</th>
-				<th class="pull-right">Outbox</th>
+				<th>Pending Transactions</th>
+				<th>Inbox</th>
+				<th>Outbox</th>
 			</thead>
 			<tbody>
 				{% for t in table %}
@@ -34,9 +34,9 @@
 							{{t.league.name}}
 						</a>
 					</td>
-					<td class="pull-right">{{t.league.pending_trans_cnt}}</td>
-					<td class="pull-right">{{t.trades_received.count }}</td>
-					<td class="pull-right">{{t.trades_proposed.count }}</td>
+					<td>{{t.league.pending_trans_cnt}}</td>
+					<td>{{t.trades_received.count }}</td>
+					<td>{{t.trades_proposed.count }}</td>
 				</tr>
 				{% endfor %}
 			</tbody>
