@@ -25,12 +25,12 @@
 				{% for t in table %}
 				<tr>
 					<td>
-						<a href="{% url 'trades:team' team.id %}">
+						<a href="{% url 'trades:team' t.id %}">
 							{{t.name}}
 						</a>
 					</td>
 					<td>
-						<a href="{% url 'trades:league' team.league.id %}">
+						<a href="{% url 'trades:league' t.league.id %}">
 							{{t.league.name}}
 						</a>
 					</td>
