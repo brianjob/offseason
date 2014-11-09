@@ -25,7 +25,7 @@ $(function() {
 			access_token : "{{access_token}}",
 
 		}).done(function(data) {
-			data = JSON.parse(data)
+			data = JSON.parse(data);
 			if (data.result == 'success') {
 				$(this).children('.result').html(
 					'<span class="glyphicon glyphicon-ok" ></span>'
