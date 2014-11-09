@@ -48,7 +48,7 @@ def login_callback(request):
 		manager = Manager.objects.create(yahoo_guid=guid, user=user)
 		manager.save()
 
-	return HttpResponse(reverse('account:dashboard'))
+	return HttpResponseRedirect(reverse('account:dashboard'))
 
 @login_required
 def new_league(request):
