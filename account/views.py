@@ -19,7 +19,10 @@ def verify(request):
 
 @login_required
 def dashboard(request):
-	return render(request, 'account/dashboard.html')
+	teams = Team.objects.all(manager=request.user.manager)
+
+	return render(request, 'account/dashboard.html',
+		{ 'teams' : teams })
 
 def login_user(request):
 	li = League_Import(LOGIN_CALLBACK)
