@@ -97,6 +97,8 @@ class League_Import(object):
 			.format(league_key)
 		)
 
+		num_picks = self.get_num_picks(league_key)
+
 		for team in league_result['team']:
 			guid = team['managers']['manager']['guid']
 
@@ -135,6 +137,16 @@ class League_Import(object):
 			if team['managers']['manager'].has_key('is_commissioner') and team['managers']['manager']['is_commissioner'] == "1":
 				league.commissioner = manager
 				league.save()
+
+			today = timezone.now()
+			if today.month > 3:
+				year = today.year + 1
+			else:
+				year = today.year
+
+			for i in range(1, num_picks + 1):
+				pick = Pick(round=i, year=year, team=t)
+				pick.save()
 
 	def import_league(self, league_id, commissioner):
 
