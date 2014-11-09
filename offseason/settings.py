@@ -57,6 +57,8 @@ WSGI_APPLICATION = 'offseason.wsgi.application'
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
+TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',)
+
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 

@@ -18,14 +18,12 @@ def verify(request):
 
 @login_required
 def dashboard(request):
-	teams = Team.objects.filter(manager=request.user.manager)
 	err = request.GET.get('err', None)
 	info = request.GET.get('info', None)
 	success = request.GET.get('success', None)
 
 	return render(request, 'account/dashboard.html',
-		{ 'teams' : teams,
-		  'error_msg' : err,
+		{ 'error_msg' : err,
 		  'info_msg' : info,
 		  'success_msg' : success })
 

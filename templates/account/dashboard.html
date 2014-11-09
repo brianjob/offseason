@@ -17,7 +17,7 @@
 		<table class="table">
 			<thead><th>Team</th><th>League</th></thead>
 			<tbody>
-				{% for team in teams %}
+				{% for team in request.user.manager.team_set.all %}
 				<tr>
 					<td>
 						<a href="{% url 'trades:team' team.id %}">
