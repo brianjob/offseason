@@ -22,8 +22,24 @@ def dashboard(request):
 	info = request.GET.get('info', None)
 	success = request.GET.get('success', None)
 
+	table = []
+
+	my_teams = Team.objects.filter(manager=request.user.manager)
+
+	for t in my_teams:
+		t = {
+		'team' : team,
+		'league' : t.league,
+		'pending' : Trade.objects.filter(team1__league=t.league).count(),
+		'inbox' : t.trades_received.count(),
+		'outbox': t.trades_proposed.count()
+		}
+
+		table.append(t)
+
 	return render(request, 'account/dashboard.html',
-		{ 'error_msg' : err,
+		{'table' : table,
+		 'error_msg' : err,
 		  'info_msg' : info,
 		  'success_msg' : success })
 

@@ -15,25 +15,34 @@
 			{% endif %}
 		</div>
 		<table class="table">
-			<thead><th>Team</th><th>League</th></thead>
+			<thead>
+				<th>Team</th><th>League</th>
+				<th class="pull-right">Pending Transactions</th>
+				<th class="pull-right">Inbox</th>
+				<th class="pull-right">Outbox</th>
+			</thead>
 			<tbody>
-				{% for team in request.user.manager.team_set.all %}
+				{% for t in table %}
 				<tr>
 					<td>
 						<a href="{% url 'trades:team' team.id %}">
-							{{team.name}}
+							{{t['team'].name}}
 						</a>
 					</td>
+					<td>{{}}</td>
 					<td>
 						<a href="{% url 'trades:league' team.league.id %}">
-							{{team.league.name}}
+							{{t.['league'].name}}
 						</a>
 					</td>
+					<td class="pull-right">{{t['pending']}}</td>
+					<td class="pull-right">{{t['inbox']}}</td>
+					<td class="pull-right">{{t['outbox']}}</td>
 				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
-		<div class="row">
+		<div class="row padded-top">
 			<a href="{% url 'account:new_league' %}">Create a New League</a>
 		</div>
 	</div>
