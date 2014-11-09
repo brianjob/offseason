@@ -42,6 +42,18 @@ class League_Import(object):
 	def get_league_name(self, league_id):
 		return self.run_query("select * from fantasysports.leagues where league_key = '{}'".format(self.get_league_key(league_id)))['league']['name']
 
+	def get_num_picks(self, league):
+		result = self.run_query(
+			"select * from fantasysports.leagues.settings where league_key='{}'"
+			.format(league.league_key))
+
+		tot = 0
+		for pos in result['league']['settings']['roster_positions']['roster_position']:
+			if (pos['position'] != 'DL' and pos['position'] != 'NA'):
+				tot += int(pos['count'])
+
+		return tot
+
 	def fill_roster(self, team):
 		if team.yahoo_id is None:
 			raise Exception('Roster cannot be auto filled with a null team yahoo id')
@@ -97,7 +109,7 @@ class League_Import(object):
 			.format(league_key)
 		)
 
-		num_picks = self.get_num_picks(league_key)
+		num_picks = self.get_num_picks(league)
 
 		for team in league_result['team']:
 			guid = team['managers']['manager']['guid']
