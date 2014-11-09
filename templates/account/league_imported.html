@@ -26,12 +26,16 @@ $(function() {
 
 		}).done(function(data) {
 			data = JSON.parse(data);
+			console.log(data.result);
+			debugger;
 			if (data.result == 'success') {
+				console.log('good');
 				$(this).children('.result').html(
 					'<span class="glyphicon glyphicon-ok" ></span>'
 				);
 			} else {
 				$(this).children('.result').html(
+					console.log('fail');
 					'<span class="glyphicon glyphicon-remove" ></span>'
 				);
 			}
