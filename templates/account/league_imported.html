@@ -18,7 +18,7 @@
 $(function() {
 	$(".team-row").each(function() {
 		var id = $(this).data('id');
-		result = $(this).children('.result');
+		var result = $(this).children('.result');
 
 		$.post("{% url 'account:fill_roster' %}",
 		{
