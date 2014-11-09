@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.core.urlresolvers import reverse
+from django.utils.http import urlencode
 import uuid
 
 IMPORT_LEAGUE_CALLBACK = 'http://offseason-trade.herokuapp.com/account/import_league_callback'
@@ -18,9 +19,15 @@ def verify(request):
 @login_required
 def dashboard(request):
 	teams = Team.objects.filter(manager=request.user.manager)
+	err = request.GET.get('err', None)
+	info = request.GET.get('info', None)
+	success = request.GET.get('success', None)
 
 	return render(request, 'account/dashboard.html',
-		{ 'teams' : teams })
+		{ 'teams' : teams,
+		  'error_msg' : err,
+		  'info_msg' : info,
+		  'success_msg' : success })
 
 def login_user(request):
 	li = League_Import(LOGIN_CALLBACK)
@@ -56,9 +63,16 @@ def new_league(request):
 
 @login_required
 def import_league(request):
+	league_id = request.POST['league_id']
+
+	if League.objects.filter(yahoo_id=league_id).exists():
+		return HttpResponseRedirect(reverse('account:dashboard') +
+			'?err=' + urlencode('That league has already been imported'))
+
 	li = League_Import(IMPORT_LEAGUE_CALLBACK)
-	request.session['league_id'] = request.POST['league_id']
+	request.session['league_id'] = league_id
 	request.session['request_token'] = li.get_request_token_str()
+
 	return HttpResponseRedirect(li.get_authorization_url())
 
 @login_required
