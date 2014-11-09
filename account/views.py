@@ -39,11 +39,10 @@ def login_callback(request):
 	li = League_Import(LOGIN_CALLBACK,
 		request.session['request_token'], request.GET['oauth_verifier'])
 
+	request.session['access_token'] = li.get_access_token().to_string()
 	guid=li.get_current_user_guid()
 	try:
 		manager = Manager.objects.get(yahoo_guid=guid)
-		print('USER: {}'.format(manager.user.username))
-		print('PASS: {}'.format(manager.user.password))
 		user = manager.user
 		# http://stackoverflow.com/questions/2787650/manually-logging-in-a-user-without-password
 		user.backend = 'django.contrib.auth.backends.ModelBackend'
