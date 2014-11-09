@@ -22,8 +22,8 @@ class League_Import(object):
 			self.request_token = self.oauthapp.get_request_token(callback_url)
 
 	@classmethod
-	def create_from_access_token(access_token):
-		instance = League_Import('')
+	def create_from_access_token(cls, access_token):
+		instance = cls('')
 		instance.oauthapp.token = access_token
 		return instance
 
