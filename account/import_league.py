@@ -21,6 +21,12 @@ class League_Import(object):
 		else:
 			self.request_token = self.oauthapp.get_request_token(callback_url)
 
+	@classmethod
+	def create_from_access_token(access_token):
+		instance = League_Import('')
+		instance.oauthapp.token = access_token
+		return instance
+
 	def get_request_token_str(self):
 		return self.request_token.to_string()
 
@@ -124,7 +130,7 @@ class League_Import(object):
 				print 'creating team: {}'.format(t.name)
 
 			t.save()
-			self.fill_roster(t)
+			#self.fill_roster(t)
 
 			if team['managers']['manager'].has_key('is_commissioner') and team['managers']['manager']['is_commissioner'] == "1":
 				league.commissioner = manager
@@ -172,6 +178,9 @@ class League_Import(object):
 			raise Exception('YQL query failed with error: "%s".' % response['error']['description'])
 		else:
 			raise Exception('YQL response malformed.')
+
+	def get_access_token(self):
+		return self.oauthapp.token
 
 def import_worker(callback, request_token, oauth_verifier, league_id, manager):
 	li = League_Import(callback, request_token, oauth_verifier)
