@@ -8,7 +8,8 @@
 	<tbody>
 		{% for team in league.team_set.all %}
 		<tr class="team-row" data-id="{{team.id}}">
-			<td>{{team.name}}</td><td class="result"></td>
+			<td>{{team.name}}</td>
+			<td class="result"><i class="glyphicon glyphicon-unchecked"></i></td>
 		</tr>
 		{% endfor %}
 	</tbody>
@@ -27,14 +28,12 @@ $(function() {
 
 		}).done(function(data) {
 			data = JSON.parse(data);
-			console.log('result: ' + data.result);
-			debugger;
 			if (data.result == 'success') {
-				console.log('good');
-				result.html('<span class="glyphicon glyphicon-ok" ></span>');
+				result.children('i').removeClass('glyphicon-unchecked')
+				.addClass('glyphicon-ok');
 			} else {
-				console.log('fail');
-				result.html('<span class="glyphicon glyphicon-remove" ></span>');
+				result.children('i').removeClass('glyphicon-unchecked')
+				.addClass('glyphicon-remove');
 			}
 		});
 	});
