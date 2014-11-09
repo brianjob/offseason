@@ -63,11 +63,6 @@ def new_league(request):
 def import_league(request):
 	league_id = request.POST['league_id']
 	li = League_Import(IMPORT_LEAGUE_CALLBACK)
-	league_key = li.get_league_key(league_id)
-
-	if League.objects.filter(yahoo_id=league_key).exists():
-		return HttpResponseRedirect(reverse('account:dashboard') +
-			'?err=' + urlencode('That league has already been imported'))
 
 	request.session['league_id'] = league_id
 	request.session['request_token'] = li.get_request_token_str()
@@ -82,6 +77,13 @@ def import_league_callback(request):
 
 	li = League_Import(IMPORT_LEAGUE_CALLBACK,
 		request_token, oauth_verifier)
+
+	league_key = li.get_league_key(league_id)
+
+	if League.objects.filter(yahoo_id=league_key).exists():
+		return HttpResponseRedirect(reverse('account:dashboard') +
+			'?err=' + urlencode('That league has already been imported'))
+
 	league = li.import_league(league_id, request.user.manager)
 
 	return render(request, 'account/league_imported.html',
