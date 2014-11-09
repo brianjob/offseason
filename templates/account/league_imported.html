@@ -18,6 +18,7 @@
 $(function() {
 	$(".team-row").each(function() {
 		var id = $(this).data('id');
+		result = $(this).children('.result');
 
 		$.post("{% url 'account:fill_roster' %}",
 		{
@@ -30,14 +31,10 @@ $(function() {
 			debugger;
 			if (data.result == 'success') {
 				console.log('good');
-				$(this).children('.result').html(
-					'<span class="glyphicon glyphicon-ok" ></span>'
-				);
+				result.html('<span class="glyphicon glyphicon-ok" ></span>');
 			} else {
 				console.log('fail');
-				$(this).children('.result').html(
-					'<span class="glyphicon glyphicon-remove" ></span>'
-				);
+				result.html('<span class="glyphicon glyphicon-remove" ></span>');
 			}
 		});
 	});
