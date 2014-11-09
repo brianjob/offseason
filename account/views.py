@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.core.urlresolvers import reverse
-from django.utils.http import urlencode
+import urllib
 import uuid
 
 IMPORT_LEAGUE_CALLBACK = 'http://offseason-trade.herokuapp.com/account/import_league_callback'
@@ -82,7 +82,7 @@ def import_league_callback(request):
 
 	if League.objects.filter(yahoo_id=league_key).exists():
 		return HttpResponseRedirect(reverse('account:dashboard') +
-			'?err=' + urlencode('That league has already been imported'))
+			'?err=' + urllib.quote_plus('That league has already been imported'))
 
 	league = li.import_league(league_id, request.user.manager)
 
