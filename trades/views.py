@@ -213,41 +213,41 @@ def trade(request, trade_id):
 def inbox(request):
 	trades = Trade.objects.filter(team2__in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
 	return render(request, 'trades/tradelist.html', 
-		{ 'heading' : 'inbox',
+		{ 'heading' : 'Inbox',
 		  'trades' : trades })
 
 @login_required
 def outbox(request):
 	trades = Trade.objects.filter(team1__in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
 	return render(request, 'trades/tradelist.html',	
-		{ 'heading' : 'outbox',
+		{ 'heading' : 'Outbox',
 		  'trades' : trades })
 
 @login_required
 def drafts(request):
 	trades = Trade.objects.filter(team1__in=request.user.manager.team_set.all()).filter(proposed_date=None)
 	return render(request, 'trades/tradelist.html', 
-		{ 'heading' : 'drafts',
+		{ 'heading' : 'Drafts',
 		  'trades': trades })
 
 @login_required
 def pending(request):
 	trades = Trade.objects.filter(Q(team1__in=request.user.manager.team_set.all()) | Q(team2__in=request.user.manager.team_set.all())).exclude(accepted_date=None).filter(completed_date=None)
 	return render(request, 'trades/tradelist.html', 
-		{ 'heading' : 'pending transactions',
+		{ 'heading' : 'Pending transactions',
 		 'trades' : trades })
 
 @login_required
 def my_trans(request):
 	trades = Trade.objects.filter(Q(team1__in=request.user.manager.team_set.all()) | Q(team2__in=request.user.manager.team_set.all()))
 	return render(request, 'trades/tradelist.html', 
-		{ 'heading' : 'my transactions',
+		{ 'heading' : 'My transactions',
 		 'trades' : trades })
 
 @login_required
 def league_trans(request):
 	trades = Trade.objects.filter(team1__league__in=[t.league for t in request.user.manager.team_set.all()]).exclude(completed_date=None)
 	return render(request, 'trades/tradelist.html', 
-		{ 'heading' : 'league_transactions',
+		{ 'heading' : 'League transactions',
 		 'trades' : trades })
 
