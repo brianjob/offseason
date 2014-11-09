@@ -181,7 +181,3 @@ class League_Import(object):
 
 	def get_access_token(self):
 		return self.oauthapp.token
-
-def import_worker(callback, request_token, oauth_verifier, league_id, manager):
-	li = League_Import(callback, request_token, oauth_verifier)
-	li.import_league(league_id, manager)

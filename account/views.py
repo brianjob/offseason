@@ -98,14 +98,3 @@ def fill_roster(request):
 	li.fill_roster(team)
 
 	return HttpResponse('{ "result" : "success" }');
-
-@login_required
-def configure_invites(request, league_id):
-	league = get_object_or_404(League, pk=league_id)
-
-	managers_to_invite = league.manager_set.filter(user=None)
-	existing_managers = league.manager_set.exclude(user=None)
-
-	return render(request, 'account/send_invitations.html', 
-		{ 'managers_to_invite' : managers_to_invite,
-		  'existing_managers' : existing_managers })
