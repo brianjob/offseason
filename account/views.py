@@ -62,12 +62,13 @@ def new_league(request):
 @login_required
 def import_league(request):
 	league_id = request.POST['league_id']
+	li = League_Import(IMPORT_LEAGUE_CALLBACK)
+	league_key = li.get_league_key(league_id)
 
-	if League.objects.filter(yahoo_id=league_id).exists():
+	if League.objects.filter(yahoo_id=league_key).exists():
 		return HttpResponseRedirect(reverse('account:dashboard') +
 			'?err=' + urlencode('That league has already been imported'))
 
-	li = League_Import(IMPORT_LEAGUE_CALLBACK)
 	request.session['league_id'] = league_id
 	request.session['request_token'] = li.get_request_token_str()
 
