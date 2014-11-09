@@ -85,7 +85,7 @@ def fill_roster(request):
 	li = League_Import.create_from_access_token(IMPORT_LEAGUE_CALLBACK, access_token)
 	li.fill_roster(team)
 
-	return HttpResponse("{ result : 'success' }");
+	return HttpResponse("{ 'result' : 'success' }");
 
 @login_required
 def configure_invites(request, league_id):
