@@ -42,6 +42,8 @@ def login_callback(request):
 	guid=li.get_current_user_guid()
 	try:
 		manager = Manager.objects.get(yahoo_guid=guid)
+		print('USER: {}'.format(manager.user.username))
+		print('PASS: {}'.format(manager.user.password))
 		user = authenticate(username=manager.user.username, password=manager.user.password)
 		login(request, user)
 	except Manager.DoesNotExist:
