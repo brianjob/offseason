@@ -16,6 +16,9 @@ class League(models.Model):
 	def __unicode__(self):
 		return self.name
 
+	def pending_trans_cnt(self):
+		Trade.objects.filter(team1__league=self).count()
+
 class Team(models.Model):
 	name = models.CharField(max_length=50)
 	league = models.ForeignKey(League)

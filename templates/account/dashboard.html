@@ -26,18 +26,18 @@
 				<tr>
 					<td>
 						<a href="{% url 'trades:team' team.id %}">
-							{{t['team'].name}}
+							{{t.name}}
 						</a>
 					</td>
 					<td>{{}}</td>
 					<td>
 						<a href="{% url 'trades:league' team.league.id %}">
-							{{t.['league'].name}}
+							{{t.league.name}}
 						</a>
 					</td>
-					<td class="pull-right">{{t['pending']}}</td>
-					<td class="pull-right">{{t['inbox']}}</td>
-					<td class="pull-right">{{t['outbox']}}</td>
+					<td class="pull-right">{{t.league.pending_trans_cnt}}</td>
+					<td class="pull-right">{{t.trades_received.count }}</td>
+					<td class="pull-right">{{t.trades_proposed.count }}</td>
 				</tr>
 				{% endfor %}
 			</tbody>
