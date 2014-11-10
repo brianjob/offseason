@@ -46,3 +46,10 @@
 .padded-top {
     margin-top: 60px;
 }
+
+.footer {
+    padding: 75px 0 75px 0;
+    color: #777;
+    background-color: #101010;
+    text-align: center;
+}
