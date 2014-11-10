@@ -3,12 +3,12 @@
 
 {% block content %}
 <div class="container">
+	{% if msg %}
+	<div class="alert alert-{{msg.message_type.bootstrap_class}}">{{msg.text}}</div>
+	{% endif %}
 	<div class="row">
 		<div class="col-md-6 teams">
 			<h2>{{league.name}}</h2>
-			{% if msg %}
-			<div class="alert alert-{{msg.message_type.bootstrap_class}}">{{msg.text}}</div>
-			{% endif %}
 			<table class="table">
 				{% for team in league.team_set.all %}
 				<tr>
