@@ -48,9 +48,23 @@
 }
 
 .footer {
-    padding: 75px 0 75px 0;
+
     margin-top: 75px;
     color: #777;
     background-color: #101010;
     text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  /* Set the fixed height of the footer here */
+    height: 60px;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
 }
