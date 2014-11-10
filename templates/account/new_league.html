@@ -6,7 +6,7 @@
 <div class="container">
 	<h1>New League</h1>
 	<p>Enter your Yahoo league id in the field below. This can be found in your league settings page.</p>
-	<img src="{% static images/league_id_example.png %}" width="1000px" style="margin:20px 0 20px 0">
+	<img src="{% static 'images/league_id_example.png' %}" width="1000px" style="margin:20px 0 20px 0">
 		<form action="{% url 'account:import_league' %}" class="form-inline" role="form" method="post">
 		{% csrf_token %}
 		<div class="form-group">
