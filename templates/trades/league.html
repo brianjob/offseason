@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container">
 	<div class="row">
-		<div class="md-col-6">
+		<div class="col-md-6">
 			<h2>{{league.name}}</h2>
 			{% if msg %}
 			<div class="alert alert-{{msg.message_type.bootstrap_class}}">{{msg.text}}</div>
@@ -23,15 +23,15 @@
 			</table>
 		</div>
 		<div class="col-md-6 transactions">
-		<h3>Pending Transactions</h3>
-		<table class="table table-condensed">
-			<thead>
-				<tr>
-					<th>Team 1</th><th>Team 2</th><th>Date Accepted</th><th>View</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for t in pending_trades.all %}
+			<h3>Pending Transactions</h3>
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th>Team 1</th><th>Team 2</th><th>Date Accepted</th><th>View</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for t in pending_trades.all %}
 					<tr>
 						<td>{{t.team1}}</td>
 						<td>{{t.team2}}</td>
@@ -39,14 +39,14 @@
 						<td>
 							<a href="{% url 'trades:trade' t.id %}">
 								<i class="glyphicon glyphicon-search">
-							</a>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
+								</a>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 
+		</div>
 	</div>
-</div>
-{% endblock %}
+	{% endblock %}
