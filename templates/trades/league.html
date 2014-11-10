@@ -37,7 +37,7 @@
 						<td>{{t.date_accepted}}</td>
 						<td><a href="{% url 'trades:trade' t.id %}"></a></td>
 					</tr>
-				{% endblock %}
+				{% endfor %}
 			</tbody>
 		</table>
 	</div>
