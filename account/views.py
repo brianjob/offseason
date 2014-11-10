@@ -90,7 +90,11 @@ def import_league_callback(request):
 		return HttpResponseRedirect(reverse('account:dashboard') +
 			'?err=' + urllib.quote_plus('That league has already been imported'))
 
-	league = li.import_league(league_id, request.user.manager)
+	try:
+		league = li.import_league(league_id, request.user.manager)
+	except TypeError:
+		return HttpResponseRedirect(reverse('account:dashboard') +
+			'?err=' + urllib.quote_plus('An error occured while importing your league. Make sure the league ID is correct and try again.'))
 
 	return render(request, 'account/league_imported.html',
 		{ 'league' : league,
