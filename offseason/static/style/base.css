@@ -7,16 +7,12 @@
 
 .city-scape {
 	background-image: url(/static/images/city-scape.jpg);
-}
-
-.day-city-scape {
-    background-image: url(/static/images/day-city-scape.jpg);
+    height: 1125px;
 }
 
 .background-image {
     background-repeat: no-repeat;
     color: white;
-    height: 945px;
     font-weight: 100;
     margin-bottom: -210px;
 }
