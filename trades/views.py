@@ -3,18 +3,24 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from trades.models import League, Team, PlayerPiece, PickPiece, Trade, Player, Pick, Veto
 from django.utils import timezone
+from datetime import timedelta
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from offseason.models import Message
 from trades.helpers import involved_in_trade, is_proposer, is_receiver
 from django.db.models import Q
 
+REVIEW_PERIOD = 3
 
 @login_required
 def league(request, league_id, msg=''):
 	l = get_object_or_404(League, pk=league_id)
 
 	t = Team.objects.filter(league=l).get(manager=request.user.manager)
+
+	complete_trades(l)
+
+	pending_trades = Trade.objects.filter(league=l).exclude(accepted_date=None).filter(completed_date=None)
 
 	msg_id = request.GET.get('msg', False)
 
@@ -23,6 +29,7 @@ def league(request, league_id, msg=''):
 
 	return render(request, 'trades/league.html',
 								{'league' : l,
+								 'pending_trades' : pending_trades,
 								 'proposer' : t,
 								 'msg' : msg})
 @login_required
@@ -234,20 +241,29 @@ def drafts(request):
 def pending(request):
 	trades = Trade.objects.filter(Q(team1__in=request.user.manager.team_set.all()) | Q(team2__in=request.user.manager.team_set.all())).exclude(accepted_date=None).filter(completed_date=None)
 	return render(request, 'trades/tradelist.html', 
-		{ 'heading' : 'Pending transactions',
+		{ 'heading' : 'My Pending Transactions',
 		 'trades' : trades })
 
 @login_required
 def my_trans(request):
 	trades = Trade.objects.filter(Q(team1__in=request.user.manager.team_set.all()) | Q(team2__in=request.user.manager.team_set.all()))
 	return render(request, 'trades/tradelist.html', 
-		{ 'heading' : 'My transactions',
+		{ 'heading' : 'My Transactions',
 		 'trades' : trades })
 
 @login_required
 def league_trans(request):
 	trades = Trade.objects.filter(team1__league__in=[t.league for t in request.user.manager.team_set.all()]).exclude(completed_date=None)
 	return render(request, 'trades/tradelist.html', 
-		{ 'heading' : 'League transactions',
+		{ 'heading' : 'All Transactions',
 		 'trades' : trades })
 
+def complete_trades(league):
+	# Here is where we are doing the completions for now
+	# This should eventually be moved to a background proc but
+	# those cost money with heroku
+	max_accept_date = timezone.now() - timedelta(days=REVIEW_PERIOD)
+	mark_for_completion = Trade.objects.filter(team1__league=league).exclude(accepted_date=None).filter(completed_date=None).filter(accepted_date__lte=max_accept_date)
+	for trade in mark_for_completion:
+		trade.completed_date = timezone.now()
+		trade.save()

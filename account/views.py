@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from account.import_league import League_Import
 from django.http import HttpResponseRedirect, HttpResponse
-from trades.models import League, Manager, Team, Trade
+from trades.models import League, Manager, Team
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
