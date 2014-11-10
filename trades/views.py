@@ -20,7 +20,7 @@ def league(request, league_id, msg=''):
 
 	complete_trades(l)
 
-	pending_trades = Trade.objects.filter(league=l).exclude(accepted_date=None).filter(completed_date=None)
+	pending_trades = Trade.objects.filter(team1__league=l).exclude(accepted_date=None).filter(completed_date=None)
 
 	msg_id = request.GET.get('msg', False)
 
