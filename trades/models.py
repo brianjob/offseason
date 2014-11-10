@@ -17,7 +17,7 @@ class League(models.Model):
 		return self.name
 
 	def pending_trans_cnt(self):
-		return Trade.objects.filter(team1__league=self).count()
+		return Trade.objects.filter(team1__league=self).exclude(accepted_date=None).filter(completed_date=None).count()
 
 
 class Team(models.Model):
