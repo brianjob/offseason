@@ -23,7 +23,7 @@
 	</div>
 	<div class="row">
 		<h3>Pending Transactions</h3>
-		<table>
+		<table class="table">
 			<thead>
 				<tr>
 					<th>Team 1</th><th>Team 2</th>Date Accepted<th>View</th>
@@ -35,7 +35,11 @@
 						<td>{{t.team1}}</td>
 						<td>{{t.team2}}</td>
 						<td>{{t.date_accepted}}</td>
-						<td><a href="{% url 'trades:trade' t.id %}"></a></td>
+						<td>
+							<a href="{% url 'trades:trade' t.id %}">
+								<i class="glyphicon glyphicon-search">
+							</a>
+						</td>
 					</tr>
 				{% endfor %}
 			</tbody>
