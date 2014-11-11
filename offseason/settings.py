@@ -24,6 +24,14 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 
+ADMINS = (('Brian', 'brianjob3@gmail.com'),)
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'offseason.app@gmail.com'
+EMAIL_HOST_PASSWORD = 'f7Ud1f0THybb'
+
 ALLOWED_HOSTS = []
 
 
@@ -48,8 +56,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'LoggingMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 )
 
 ROOT_URLCONF = 'offseason.urls'
