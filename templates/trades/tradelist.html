@@ -17,14 +17,14 @@
 		<tbody>
 			{% for trade in trades.all %}
 			<tr>
-				<td>{{trade.team1.name}}</td>
-				<td>{{trade.team2.name}}</td>
+				<td><a href="{% url 'trades:team' trade.team1.id %}" >{{trade.team1.name}}</a></td>
+				<td><a href="{% url 'trades:team' trade.team2.id %}" >{{trade.team2.name}}</a></td>
 				<td>{{trade.proposed_date}}</td>
 				<td>{{trade.accepted_date}}</td>
 				<td>{{trade.rejected_date}}</td>
 				<td>{{trade.completed_date}}</td>
-				<td><a class="btn btn-primary btn-sm" href="{% url 'trades:trade' trade.pk %}">
-					View Trade
+				<td><a href="{% url 'trades:trade' trade.pk %}">
+					<i class="glyphicon glyphicon-search">
 				</a>
 			</tr>
 			{% endfor %}

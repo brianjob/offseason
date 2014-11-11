@@ -27,14 +27,14 @@
 			<table class="table table-condensed">
 				<thead>
 					<tr>
-						<th>Team 1</th><th>Team 2</th><th>Date Accepted</th><th>View</th>
+						<th>Team 1</th><th>Team 2</th><th>Date Accepted</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for t in pending_trades.all %}
 					<tr>
-						<td>{{t.team1}}</td>
-						<td>{{t.team2}}</td>
+						<td><a href="{% url 'trades:team' t.team1.id %}" >{{t.team1}}</td>
+						<td><a href="{% url 'trades:team' t.team2.id %}" >{{t.team2}}</td>
 						<td>{{t.accepted_date}}</td>
 						<td><a href="{% url 'trades:trade' t.id %}"><i class="glyphicon glyphicon-search"></a></td>
 					</tr>
