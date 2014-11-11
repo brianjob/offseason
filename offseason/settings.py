@@ -103,10 +103,10 @@ USE_TZ = True
 import dj_database_url
 DATABASES['default'] =  dj_database_url.config()
 DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
-DATABASES['default']['NAME'] = 'd3nvd1uovnir6g'
-DATABASES['default']['USER'] = 'tvdeanysboalvt'
-DATABASES['default']['PASSWORD'] = 'T-dL_Q_vvW7oUP6fF4Cdf_j3qA'
-DATABASES['default']['HOST'] = 'ec2-174-129-21-42.compute-1.amazonaws.com'
+DATABASES['default']['NAME'] = os.getenv('DB_NAME') #'d3nvd1uovnir6g'
+DATABASES['default']['USER'] = os.getenv('DB_USER') #tvdeanysboalvt'
+DATABASES['default']['PASSWORD'] = os.getenv('DB_PASS') #T-dL_Q_vvW7oUP6fF4Cdf_j3qA'
+DATABASES['default']['HOST'] = os.getenv('DB_HOST') #ec2-174-129-21-42.compute-1.amazonaws.com'
 
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
