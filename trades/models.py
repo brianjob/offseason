@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
+from itertools import chain
 
 class Manager(models.Model):
 	yahoo_guid = models.CharField(max_length=200)
 	user = models.OneToOneField(User)
 
 	def teams(self):
-		return self.teams_managed + self.teams_comanaged
+		return list(chain(self.teams_managed.all(), self.teams_comanaged.all()))
 
 	def __unicode__(self):
 		return self.user.username
