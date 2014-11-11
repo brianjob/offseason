@@ -174,6 +174,7 @@ class League_Import(object):
 		)
 
 		print 'creating league: {}'.format(league.name)
+		print 'access token: {}'.format(self.get_access_token().to_string())
 		league.save()
 
 		self.fill_league(league)

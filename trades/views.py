@@ -270,4 +270,6 @@ def complete_trades(league):
 		else:
 			trade.completed_date = timezone.now()
 
+			# SWAP PLAYERS / PICKS
+
 		trade.save()
