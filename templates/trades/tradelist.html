@@ -23,9 +23,7 @@
 				<td>{{trade.accepted_date}}</td>
 				<td>{{trade.rejected_date}}</td>
 				<td>{{trade.completed_date}}</td>
-				<td><a href="{% url 'trades:trade' trade.pk %}">
-					<i class="glyphicon glyphicon-search">
-				</a>
+				<td><a href="{% url 'trades:trade' trade.pk %}"><i class="glyphicon glyphicon-search"></a></td>
 			</tr>
 			{% endfor %}
 		</tbody>
