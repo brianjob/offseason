@@ -5,6 +5,9 @@ class Manager(models.Model):
 	yahoo_guid = models.CharField(max_length=200)
 	user = models.OneToOneField(User)
 
+	def teams(self):
+		return self.teams_managed + self.teams_comanaged
+
 	def __unicode__(self):
 		return self.user.username
 
