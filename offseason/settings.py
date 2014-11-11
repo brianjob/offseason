@@ -20,9 +20,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'kb00=)muywl-u-*i0e(-(uj@=3^i)sjsfwua310)+5u8fu=h%p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ADMINS = (('Brian', 'brianjob3@gmail.com'),)
 
