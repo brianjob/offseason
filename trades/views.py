@@ -265,5 +265,9 @@ def complete_trades(league):
 	max_accept_date = timezone.now() - timedelta(days=REVIEW_PERIOD)
 	mark_for_completion = Trade.objects.filter(team1__league=league).exclude(accepted_date=None).filter(completed_date=None).filter(accepted_date__lte=max_accept_date)
 	for trade in mark_for_completion:
-		trade.completed_date = timezone.now()
+		if trade.vetoed():
+			trade.vetoed_date = timezone.now()
+		else:
+			trade.completed_date = timezone.now()
+
 		trade.save()

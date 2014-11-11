@@ -59,6 +59,7 @@ class Trade(models.Model):
 	accepted_date = models.DateTimeField('date accepted', null = True)
 	rejected_date = models.DateTimeField('date rejected', null = True)
 	completed_date = models.DateTimeField('date completed', null = True)
+	vetoed_date = models.DateTimeField('date vetoed', null = True)
 
 	def vetoed(self):
 		votes_against = len(self.veto_set.all())
