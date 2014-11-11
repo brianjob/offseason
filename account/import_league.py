@@ -4,11 +4,12 @@ from django.utils import timezone
 from trades.models import Player, Team, Manager, Pick, League
 from django.contrib.auth.models import User
 import uuid
-	
+import os
+
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
-CONSUMER_KEY      = 'dj0yJmk9NWdNVWRYWngwaUF5JmQ9WVdrOU1HcFpjRGt6Tm5VbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1iZA--'
-CONSUMER_SECRET   = '2cc6e94d26c4a943ce7c13a47deb65f4b73f5e02'
-APPLICATION_ID    = '0jYp936u'
+CONSUMER_KEY      = os.environ['CONSUMER_KEY']
+CONSUMER_SECRET   = os.environ['CONSUMER_SECRET']
+APPLICATION_ID    = os.environ['APPLICATION_ID']
 
 
 class League_Import(object):

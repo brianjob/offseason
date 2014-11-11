@@ -8,10 +8,12 @@ from django.contrib.auth import login, authenticate
 from django.core.urlresolvers import reverse
 import urllib
 import uuid
+import os
 
-IMPORT_LEAGUE_CALLBACK = 'http://offseason-trade.herokuapp.com/account/import_league_callback'
-LINK_PROFILE_CALLBACK = 'http://offseason-trade.herokuapp.com/account/link_profile_callback'
-LOGIN_CALLBACK = 'http://offseason-trade.herokuapp.com/account/login_callback'
+APP_NAME = os.environ['APP_NAME'];
+IMPORT_LEAGUE_CALLBACK = 'http://{}.herokuapp.com/account/import_league_callback'.format(APP_NAME)
+LINK_PROFILE_CALLBACK = 'http://{}.herokuapp.com/account/link_profile_callback'.format(APP_NAME)
+LOGIN_CALLBACK = 'http://{}.herokuapp.com/account/login_callback'.format(APP_NAME)
 
 def verify(request):
 	return HttpResponse('hi');
