@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+<div class="container">
+	<h1>Authentication Error</h1>
+	<p>Yahoo can be a little finicky sometimes... usually going back to <a href="{% url 'login' %}">the login page</a> and trying it again should do the trick.</p>
+</div>
+{% endblock %}
+{% block navigation %}
+{% endblock %}
+{% block footer %}
+{% endblock %}

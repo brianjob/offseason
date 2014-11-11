@@ -39,8 +39,11 @@ def login_user(request):
 
 def login_callback(request):
 	print 'login callback!!'
-	li = League_Import(LOGIN_CALLBACK,
-		request.session['request_token'], request.GET['oauth_verifier'])
+	try:
+		li = League_Import(LOGIN_CALLBACK,
+			request.session['request_token'], request.GET['oauth_verifier'])
+	except KeyError:
+		return render(request, 'account/authentication_error.html')
 
 	request.session['access_token'] = li.get_access_token().to_string()
 	guid=li.get_current_user_guid()

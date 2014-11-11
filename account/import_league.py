@@ -112,10 +112,13 @@ class League_Import(object):
 		num_picks = self.get_num_picks(league)
 
 		for team in league_result['team']:
-			guid = team['managers']['manager']['guid']
+			guid = team['managers']['manager'][0]['guid']
 
 			try:
 				manager = Manager.objects.get(yahoo_guid=guid)
+				if 'email' in team['manager']['manager'] and manager.user.email == '':
+					manager.user.email = team['manager']['manager'][0]['email']
+					manager.save()
 			except Manager.DoesNotExist:
 				try:
 					email = team['managers']['manager']['email']
@@ -142,9 +145,10 @@ class League_Import(object):
 				)
 
 				print 'creating team: {}'.format(t.name)
+				if len(team['managers']['manager']) > 1:
+					print '{} IS A CO MANAGED TEAM'.format(t.name)
 
 			t.save()
-			#self.fill_roster(t)
 
 			if team['managers']['manager'].has_key('is_commissioner') and team['managers']['manager']['is_commissioner'] == "1":
 				league.commissioner = manager
@@ -170,7 +174,9 @@ class League_Import(object):
 		league = League(
 			name=result['league']['name'],
 			yahoo_id=result['league']['league_key'],
-			commissioner=commissioner
+			commissioner=commissioner,
+			num_teams=result['league']['num_teams'],
+			url=result['league']['url']
 		)
 
 		print 'creating league: {}'.format(league.name)

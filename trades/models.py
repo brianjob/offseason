@@ -12,6 +12,8 @@ class League(models.Model):
 	name = models.CharField(max_length=200)
 	yahoo_id = models.CharField(max_length=200)
 	commissioner = models.ForeignKey(Manager)
+	num_teams = models.IntegerField()
+	url = models.CharField(max_length=250)
 
 	def __unicode__(self):
 		return self.name
@@ -25,6 +27,7 @@ class Team(models.Model):
 	league = models.ForeignKey(League)
 	yahoo_id = models.CharField(max_length=200)
 	manager = models.ForeignKey(Manager)
+	co_manager = models.ForeignKey(Manager, null = True)
 
 	def inbox(self):
 		return self.trades_received.filter(rejected_date=None).filter(accepted_date=None)
