@@ -74,7 +74,7 @@ class Veto(models.Model):
 	manager = models.ForeignKey(Manager)
 
 	def __unicode__(self):
-		return self.manager.team.name + ': ' + str(self.trade)
+		return str(self.manager) + ': ' + str(self.trade)
 
 class PlayerPiece(models.Model):
 	trade = models.ForeignKey(Trade)
