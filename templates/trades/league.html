@@ -35,18 +35,13 @@
 					<tr>
 						<td>{{t.team1}}</td>
 						<td>{{t.team2}}</td>
-						<td>{{t.date_accepted}}</td>
-						<td>
-							<a href="{% url 'trades:trade' t.id %}">
-								<i class="glyphicon glyphicon-search">
-								</a>
-							</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-
+						<td>{{t.accepted_date}}</td>
+						<td><a href="{% url 'trades:trade' t.id %}"><i class="glyphicon glyphicon-search"></a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 		</div>
 	</div>
-	{% endblock %}
+</div>
+{% endblock %}
