@@ -26,6 +26,12 @@ class Team(models.Model):
 	yahoo_id = models.CharField(max_length=200)
 	manager = models.ForeignKey(Manager)
 
+	def inbox(self):
+		return self.trades_received.filter(rejected_date=None).filter(accepted_date=None)
+
+	def outbox(self):
+		return self.trades_proposed.filter(rejected_date=None).filter(accepted_date=None)
+
 	def __unicode__(self):
 		return self.name
 
