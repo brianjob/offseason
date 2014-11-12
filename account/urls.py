@@ -9,5 +9,6 @@ urlpatterns = patterns('account.views',
     url(r'^dashboard$', views.dashboard, name='dashboard'),
     url(r'^login_user', views.login_user, name='login_yahoo'),
     url(r'^login_callback$', views.login_callback, name='login_callback'),
-    url(r'^fill_roster', views.fill_roster, name='fill_roster')
+    url(r'^fill_roster', views.fill_roster, name='fill_roster'),
+    url(r'^delete_league', views.delete_league, name='delete_league')
 )

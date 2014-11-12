@@ -115,3 +115,14 @@ def fill_roster(request):
 	li.fill_roster(team)
 
 	return HttpResponse('{ "result" : "success" }');
+
+@login_required
+def delete_league(request):
+	league_id = request.POST['league_id']
+	league = get_object_or_404(League, pk=league_id)
+
+	if request.user.manager == league.commisioner:
+		league.delete()
+		return HttpResponseRedirect(reverse('account:dashboard') + '?err=' + urllib.quote_plus("You must be the commisioner to delete a league"))
+	else:
+		return HttpResponseRedirect(reverse('account:dashboard') + '?success=' + urllib.quote_plus("League deleted successfully"))

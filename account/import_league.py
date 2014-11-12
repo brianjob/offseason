@@ -165,10 +165,16 @@ class League_Import(object):
 				pick.save()
 
 	def import_league(self, league_id, commissioner):
+		league_key = self.get_league_key(league_id)
 
 		result = self.run_query(
 			"select * from fantasysports.leagues where league_key='{}'"
-			.format(self.get_league_key(league_id))
+			.format(league_key)
+		)
+
+		settings = self.run_query(
+			"select * from fantasysports.leagues.settings where league_key='{}'"
+			.format(league_key)
 		)
 
 		league = League(
@@ -176,7 +182,8 @@ class League_Import(object):
 			yahoo_id=result['league']['league_key'],
 			commissioner=commissioner,
 			num_teams=result['league']['num_teams'],
-			url=result['league']['url']
+			url=result['league']['url'],
+			trade_reject_time=settings['league']['trade_reject_time']
 		)
 
 		print 'creating league: {}'.format(league.name)

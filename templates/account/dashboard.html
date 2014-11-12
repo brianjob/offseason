@@ -37,12 +37,26 @@
 					<td>{{t.league.pending_trans_cnt}}</td>
 					<td>{{t.inbox.count }}</td>
 					<td>{{t.outbox.count }}</td>
+					<td><a class="delete-league" data-id="{{ t.league.id }}"><i class="glyphicon glyphicon-remove"></a></td>
 				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
+		<form id="delete-form" action="{% url 'account:delete_league' %}">
+		{% csrf_token %}
+			<input id="league-id" type="hidden" name="league_id">
+		</form>
 		<div class="row padded-top">
 			<a class="btn btn-primary" href="{% url 'account:new_league' %}">Create a New League</a>
 		</div>
 	</div>
+	<script type="text/javascript">
+	$(function() {
+		$(".delete-league").click(function() {
+			var id = $(this).data('id');
+			$("#league-id").val(id);
+			$("#delete-form").submit();
+		});
+	})
+	</script>
 {% endblock %}
