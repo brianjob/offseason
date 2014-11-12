@@ -122,7 +122,7 @@ def delete_league(request):
 	league = get_object_or_404(League, pk=league_id)
 
 	if request.user.manager == league.commissioner:
-		league.delete()
-		return HttpResponseRedirect(reverse('account:dashboard') + '?err=' + urllib.quote_plus("You must be the commisioner to delete a league"))
-	else:
 		return HttpResponseRedirect(reverse('account:dashboard') + '?success=' + urllib.quote_plus("League deleted successfully"))
+		league.delete()
+	else:
+		return HttpResponseRedirect(reverse('account:dashboard') + '?err=' + urllib.quote_plus("You must be the commisioner to delete a league"))
