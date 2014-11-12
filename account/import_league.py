@@ -154,7 +154,8 @@ class League_Import(object):
 				league.commissioner = manager
 				league.save()
 
-			self.pop_initial_picks(num_picks, t)
+			if not league.is_auction_draft: # picks are only applicable to a non auction league
+				self.pop_initial_picks(num_picks, t)
 
 	def import_league(self, league_id, commissioner):
 		league_key = self.get_league_key(league_id)
@@ -186,7 +187,9 @@ class League_Import(object):
 		league.save()
 
 		self.fill_league(league)
-		self.run_pick_transactions(league)
+
+		if not league.is_auction_draft: # picks only applicable to non auction leagues
+			self.run_pick_transactions(league)
 
 		return league
 
