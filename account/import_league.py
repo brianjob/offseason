@@ -213,7 +213,7 @@ class League_Import(object):
 					src_team = league.team_set.get(yahoo_id=src_id)
 					dest_team = league.team_set.get(yahoo_id=dest_id)
 
-					pick = src_team.pick_set.get(round=int(pick['round']))
+					pick = src_team.pick_set.filter(round=int(pick['round']))[0]
 					pick.team = dest_team;
 					pick.save()
 
