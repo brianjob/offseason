@@ -42,7 +42,7 @@
 				{% endfor %}
 			</tbody>
 		</table>
-		<form id="delete-form" action="{% url 'account:delete_league' %}">
+		<form id="delete-form" action="{% url 'account:delete_league' %}" method="post">
 		{% csrf_token %}
 			<input id="league-id" type="hidden" name="league_id">
 		</form>
