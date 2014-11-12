@@ -154,15 +154,7 @@ class League_Import(object):
 				league.commissioner = manager
 				league.save()
 
-			today = timezone.now()
-			if today.month > 3:
-				year = today.year + 1
-			else:
-				year = today.year
-
-			for i in range(1, num_picks + 1):
-				pick = Pick(round=i, year=year, team=t)
-				pick.save()
+			self.pop_initial_picks(num_picks, t)
 
 	def import_league(self, league_id, commissioner):
 		league_key = self.get_league_key(league_id)
@@ -197,6 +189,17 @@ class League_Import(object):
 		self.run_pick_transactions(league)
 
 		return league
+
+	def pop_initial_picks(self, num_picks, team):
+		today = timezone.now()
+		if today.month > 3:
+			year = today.year + 1
+		else:
+			year = today.year
+
+		for i in range(1, num_picks + 1):
+			pick = Pick(round=i, year=year, team=team)
+			pick.save()
 
 	def run_pick_transactions(self, league):
 		result = self.run_query(
