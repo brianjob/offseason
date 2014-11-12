@@ -31,19 +31,12 @@ class Team(models.Model):
 	league = models.ForeignKey(League)
 	yahoo_id = models.CharField(max_length=200)
 	manager = models.ForeignKey(Manager, related_name='teams_managed')
-	comanager = models.ForeignKey(Manager, related_name='teams_comanaged', null = True)
 
 	def inbox(self):
 		return self.trades_received.filter(rejected_date=None).filter(accepted_date=None)
 
 	def outbox(self):
 		return self.trades_proposed.filter(rejected_date=None).filter(accepted_date=None)
-
-	def managers(self):
-		managers = [self.manager]
-		if self.comanager is not None:
-			managers.append(self.comanager)
-		return managers
 
 	def __unicode__(self):
 		return self.name
