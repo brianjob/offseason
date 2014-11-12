@@ -202,7 +202,7 @@ class League_Import(object):
 	def run_pick_transactions(self, league):
 		result = self.run_query(
 			"select * from fantasysports.leagues.transactions where league_key='{}'"
-			.format(league.id)
+			.format(league.yahoo_id)
 		)
 
 		for transaction in result['league']['transactions']['transaction']:
