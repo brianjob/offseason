@@ -113,12 +113,12 @@ class League_Import(object):
 		num_picks = self.get_num_picks(league)
 
 		for team in league_result['team']:
-			guid = team['managers']['manager'][0]['guid']
+			guid = team['managers']['manager']['guid']
 
 			try:
 				manager = Manager.objects.get(yahoo_guid=guid)
 				if 'email' in team['manager']['manager'] and manager.user.email == '':
-					manager.user.email = team['manager']['manager'][0]['email']
+					manager.user.email = team['manager']['manager']['email']
 					manager.save()
 			except Manager.DoesNotExist:
 				try:

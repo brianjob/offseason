@@ -54,7 +54,7 @@
            <li class="dropdown">
              <a class="dropdown-toggle" href="#" data-toggle="dropdown">My Teams<span class="caret"></span></a>
              <ul class="dropdown-menu" role="menu">
-               {% for team in request.user.manager.teams %}
+               {% for team in request.user.manager.team_set.all %}
                <li>
                  <a href="{% url 'trades:team' team.id %}">{{ team.name }}</a>
                </li>
@@ -64,7 +64,7 @@
            <li class="dropdown">
              <a class="dropdown-toggle" href="#" data-toggle="dropdown">My Leagues<span class="caret"></span></a>
              <ul class="dropdown-menu" role="menu">
-               {% for team in request.user.manager.teams %}
+               {% for team in request.user.manager.team_set.all %}
                <li><a href="{% url 'trades:league' team.league.id %}">{{ team.league.name }}</a></li>
                {% endfor %}
              </ul>
