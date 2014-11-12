@@ -100,7 +100,7 @@ def import_league_callback(request):
 	except TypeError:
 		if league is not None:
 			league.delete()
-			
+
 		return HttpResponseRedirect(reverse('account:dashboard') +
 			'?err=' + urllib.quote_plus('An error occured while importing your league. Make sure the league ID is correct and try again.'))
 

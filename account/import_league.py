@@ -164,8 +164,6 @@ class League_Import(object):
 				pick = Pick(round=i, year=year, team=t)
 				pick.save()
 
-			self.run_pick_transactions(league)
-
 	def import_league(self, league_id, commissioner):
 		league_key = self.get_league_key(league_id)
 
@@ -196,6 +194,7 @@ class League_Import(object):
 		league.save()
 
 		self.fill_league(league)
+		self.run_pick_transactions(league)
 
 		return league
 
