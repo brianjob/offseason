@@ -5,6 +5,7 @@ from trades.models import Player, Team, Manager, Pick, League
 from django.contrib.auth.models import User
 import uuid
 import os
+import simplejson as json
 
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = os.environ['CONSUMER_KEY']
@@ -146,8 +147,6 @@ class League_Import(object):
 				)
 
 				print 'creating team: {}'.format(t.name)
-				if len(team['managers']['manager']) > 1:
-					print '{} IS A CO MANAGED TEAM'.format(t.name)
 
 			t.save()
 
@@ -203,6 +202,8 @@ class League_Import(object):
 		print 'running: ' + query
 
 		response = self.oauthapp.yql(query)
+
+		print 'response: ' + json.dumps(response)
 
 		if 'query' in response and 'results' in response['query']:
 			return response['query']['results']

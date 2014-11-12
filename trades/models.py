@@ -18,6 +18,7 @@ class League(models.Model):
 	commissioner = models.ForeignKey(Manager)
 	num_teams = models.IntegerField()
 	url = models.CharField(max_length=250)
+	trade_reject_time = models.IntegerField()
 
 	def __unicode__(self):
 		return self.name
