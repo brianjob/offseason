@@ -183,7 +183,10 @@ class League_Import(object):
 			commissioner=commissioner,
 			num_teams=result['league']['num_teams'],
 			url=result['league']['url'],
-			trade_reject_time=settings['league']['trade_reject_time']
+			trade_reject_time=settings['league']['settings']['trade_reject_time'],
+			can_trade_picks=settings['league']['settings']['can_trade_picks'] == '1',
+			scoring_type=settings['league']['settings']['scoring_type'],
+			is_auction_draft=settings['league']['settings']['is_auction_draft'] == '1'
 		)
 
 		print 'creating league: {}'.format(league.name)

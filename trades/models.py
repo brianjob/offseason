@@ -19,6 +19,9 @@ class League(models.Model):
 	num_teams = models.IntegerField()
 	url = models.CharField(max_length=250)
 	trade_reject_time = models.IntegerField()
+	can_trade_picks = models.BooleanField()
+	scoring_type = models.CharField(max_length=50)
+	is_auction_draft = models.BooleanField()
 
 	def __unicode__(self):
 		return self.name

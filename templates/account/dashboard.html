@@ -53,9 +53,11 @@
 	<script type="text/javascript">
 	$(function() {
 		$(".delete-league").click(function() {
-			var id = $(this).data('id');
-			$("#league-id").val(id);
-			$("#delete-form").submit();
+			if (confirm("Really delete this league?")) {
+				var id = $(this).data('id');
+				$("#league-id").val(id);
+				$("#delete-form").submit();
+			}
 		});
 	})
 	</script>
