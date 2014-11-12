@@ -117,8 +117,8 @@ class League_Import(object):
 
 			try:
 				manager = Manager.objects.get(yahoo_guid=guid)
-				if 'email' in team['manager']['manager'] and manager.user.email == '':
-					manager.user.email = team['manager']['manager']['email']
+				if 'email' in team['managers']['manager'] and manager.user.email == '':
+					manager.user.email = team['managers']['manager']['email']
 					manager.save()
 			except Manager.DoesNotExist:
 				try:
