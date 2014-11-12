@@ -130,9 +130,9 @@ class League_Import(object):
 					username = guid
 
 					# give the user a random unique pw and they can change it later
-				user = User.objects.create_user(username, email, uuid.uuid4())
-				manager = Manager(yahoo_guid=guid, user=user)
-				manager.save()
+					user = User.objects.create_user(username, email, uuid.uuid4())
+					manager = Manager(yahoo_guid=guid, user=user)
+					manager.save()
 			
 			try:
 				t = Team.objects.filter(league=league).get(yahoo_id=team['team_id'])
@@ -163,6 +163,8 @@ class League_Import(object):
 			for i in range(1, num_picks + 1):
 				pick = Pick(round=i, year=year, team=t)
 				pick.save()
+
+			self.run_pick_transactions(league)
 
 	def import_league(self, league_id, commissioner):
 		league_key = self.get_league_key(league_id)
@@ -197,10 +199,24 @@ class League_Import(object):
 
 		return league
 
-	def add_picks(self, team, year):
-		for rd in range(1, 23):
-			pick = Pick(round=rd, year=year, team=team)
-			pick.save()
+	def run_pick_transactions(self, league):
+		result = self.run_query(
+			"select * from fantasysports.leagues.transactions where league_key='{}'"
+			.format(league.id)
+		)
+
+		for transaction in result['league']['transactions']['transaction']:
+			if transaction['type'] == 'trade' and transaction['status'] == 'successful':
+				for pick in transaction['picks']['pick']:
+					src_id = pick['source_team_key'].split('.t.')[1]
+					dest_id = pick['destination_team_key'].split('.t.')[1]
+
+					src_team = league.team_set.get(yahoo_id=src_id)
+					dest_team = league.team_set.get(yahoo_id=dest_id)
+
+					pick = src_team.pick_set.get(round=int(pick['round']))
+					pick.team = dest_team;
+					pick.save()
 
 	def get_current_user_guid(self):
 		return self.oauthapp.token.yahoo_guid

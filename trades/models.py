@@ -42,6 +42,9 @@ class Team(models.Model):
 	def outbox(self):
 		return self.trades_proposed.filter(rejected_date=None).filter(accepted_date=None)
 
+	def team_key(self):
+		return "{}.t.{}".format(self.league.yahoo_id, self.yahoo_id)
+
 	def __unicode__(self):
 		return self.name
 

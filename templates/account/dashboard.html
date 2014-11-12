@@ -37,7 +37,9 @@
 					<td>{{t.league.pending_trans_cnt}}</td>
 					<td>{{t.inbox.count }}</td>
 					<td>{{t.outbox.count }}</td>
+					{% if request.user.manager == t.league.commissioner %}
 					<td><a class="delete-league" data-id="{{ t.league.id }}"><i class="glyphicon glyphicon-remove"></a></td>
+					{% endif %}
 				</tr>
 				{% endfor %}
 			</tbody>
