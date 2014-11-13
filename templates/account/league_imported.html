@@ -35,8 +35,10 @@ function fill_roster(id, result) {
 			.wrap('<a href="#"></a>')
 			.before('<i class="glyphicon glyphicon-remove" style="margin-right:10px">')
 			.click(function() {
+				$(this).closest("tr").removeClass("success").removeClass("danger");
 				fill_roster(id, result);
-			});
+			})
+			.closest("tr").addClass("danger");
 	}
 	function handle_success(id, result) {
 		result.find(".glyphicon-unchecked, .glyphicon-repeat")
@@ -44,7 +46,8 @@ function fill_roster(id, result) {
 			.removeClass("glyphicon-repeat")
 			.addClass("glyphicon-ok")
 			.unwrap()
-			.unbind('click');
+			.unbind('click')
+			.closest("tr").addClass("success");
 
 		result.find(".glyphicon-remove").remove();
 	}
