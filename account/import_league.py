@@ -177,6 +177,11 @@ class League_Import(object):
 			.format(league_key)
 		)
 
+		if settings['league']['settings'].has_key('can_trade_draft_picks'):
+			can_trade_picks = settings['league']['settings']['can_trade_draft_picks'] == '1'
+		else:
+			can_trade_picks = False
+
 		league = League(
 			name=result['league']['name'],
 			yahoo_id=result['league']['league_key'],
@@ -184,7 +189,7 @@ class League_Import(object):
 			num_teams=result['league']['num_teams'],
 			url=result['league']['url'],
 			trade_reject_time=settings['league']['settings']['trade_reject_time'],
-			can_trade_picks=settings['league']['settings']['can_trade_draft_picks'] == '1',
+			can_trade_picks=can_trade_picks,
 			scoring_type=settings['league']['settings']['scoring_type'],
 			is_auction_draft=settings['league']['settings']['is_auction_draft'] == '1'
 		)
