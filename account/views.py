@@ -98,9 +98,12 @@ def import_league_callback(request):
 	try:
 		league = li.import_league(league_id, request.user.manager)
 	except Exception:
-		if league is not None:
+		try:
+			league = League.objects.get(yahoo_id=league_key)
 			league.delete()
-			raise
+		except League.DoesNotExist:
+			print 'league not created yet'
+		raise
 
 		return HttpResponseRedirect(reverse('account:dashboard') +
 			'?err=' + urllib.quote_plus('An error occured while importing your league. Make sure the league ID is correct and try again.'))

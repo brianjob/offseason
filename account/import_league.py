@@ -195,7 +195,7 @@ class League_Import(object):
 
 		self.fill_league(league)
 
-		if not league.is_auction_draft: # picks only applicable to non auction leagues
+		if not league.is_auction_draft and league.can_trade_picks: # picks only applicable to non auction leagues
 			self.run_pick_transactions(league)
 
 		return league
@@ -237,9 +237,10 @@ class League_Import(object):
 		if self.oauthapp.token is None:
 			raise Exception('access token not generated')
 
-		print 'running: ' + query
-
-		response = self.oauthapp.yql(query)
+		try_count = 0
+		while 'query' in response and 'results' in response['query'] and response is None and try_count < 3: # try a max of 3 times
+			print 'running[{}]: {}'.format(try_count, query)
+			response = self.oauthapp.yql(query)
 
 		print 'response: ' + json.dumps(response)
 
