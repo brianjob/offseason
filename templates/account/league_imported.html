@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
+	We're populating your league's rosters right now. Make sure you wait until check marks appear next to each team before you navigate away from the page. If an import fails, please retry it with the <i class="glyphicon glyphicon-repeat"> icon. Yahoo likes to be uncooperative sometimes.
 <table class="table">
 	<thead>
 		<tr><th>Team</th><th>Imported</th></tr>
@@ -27,8 +28,8 @@ $(function() {
 
 function fill_roster(id, access_token, result) {
 	function handle_error(id, access_token, result) {
-		result.html('<a href="#" ><i class="glyphicon glyphicon-repeat"></a>')
-		result.click(function() {
+		result.html('<i class="glyphicon glyphicon-remove"><a href="#" ><i class="glyphicon glyphicon-repeat"></a>')
+		result.children("a").click(function() {
 			fill_roster(id, access_token, result);
 		});
 	}
@@ -41,8 +42,11 @@ function fill_roster(id, access_token, result) {
 	}).done(function(data) {
 		data = JSON.parse(data);
 		if (data.result == 'success') {
-			result.html('<i class="glyphicon glyphicon-success">');
-			result.unbind('click');
+			var a = result.children('a');
+			if (a)
+				a.unbind('click');
+
+			result.html('<i class="glyphicon glyphicon-ok">');
 		} else {
 			handle_error(id, access_token, result);
 		}
