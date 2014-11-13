@@ -41,14 +41,14 @@ function fill_roster(id, result) {
 			.closest("tr").addClass("danger");
 	}
 	function handle_success(id, result) {
+		result.find("a > .glyphicon-unchecked, a > .glyphicon-repeat").unwrap();
+
 		result.find(".glyphicon-unchecked, .glyphicon-repeat")
 			.removeClass("glyphicon-unchecked")
 			.removeClass("glyphicon-repeat")
 			.addClass("glyphicon-ok")
 			.unbind('click')
 			.closest("tr").addClass("success");
-
-		result.find("a > .glyphicon-unchecked, a > .glyphicon-repeat").unwrap()
 
 		result.find(".glyphicon-remove").remove();
 	}
