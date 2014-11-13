@@ -234,7 +234,7 @@ class League_Import(object):
 			raise Exception('access token not generated')
 
 		try_count = 0
-		max_attempts = 1
+		max_attempts = 3
 
 		while True:
 			print 'running[{}]: {}'.format(try_count, query)
