@@ -129,17 +129,17 @@ class League_Import(object):
 					manager.user.email = json_mgr['email']
 					manager.save()
 			except Manager.DoesNotExist:
-				try:
+				if 'email' in json_mgr:
 					email = json_mgr['email']
 					username = email
-				except KeyError:
+				else:
 					email = ''
 					username = guid
 
 					# give the user a random unique pw and they can change it later
-					user = User.objects.create_user(username, email, uuid.uuid4())
-					manager = Manager(yahoo_guid=guid, user=user)
-					manager.save()
+				user = User.objects.create_user(username, email, uuid.uuid4())
+				manager = Manager(yahoo_guid=guid, user=user)
+				manager.save()
 			
 			try:
 				t = Team.objects.filter(league=league).get(yahoo_id=team['team_id'])
