@@ -74,7 +74,7 @@ class League_Import(object):
 
 		result = None
 		counter = 0
-		while(result is None and counter < 10):
+		while(result is None and counter < 5):
 			result = self.run_query(
 				"select * from fantasysports.teams.roster where team_key='{}' and date='{}'"
 				.format(team_key, date_str)

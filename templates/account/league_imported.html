@@ -21,10 +21,11 @@ $(function() {
 		var id = $(this).data('id');
 		var result = $(this).children('.result');
 
+		fill_roster(id, "{{access_token}}")
 		$.post("{% url 'account:fill_roster' %}",
 		{
 			team_id : id,
-			access_token : "{{access_token}}",
+			access_token : "{{access_token}}"
 
 		}).done(function(data) {
 			data = JSON.parse(data);
@@ -35,8 +36,41 @@ $(function() {
 				result.children('i').removeClass('glyphicon-unchecked')
 				.addClass('glyphicon-remove');
 			}
+		})
+		.fail(function(err) {
+			var icon = result.children('i');
+			icon.removeClass('glyphicon-unchecked');
+			icon.addClass('glyphicon-repeat');
+			});
 		});
 	});
 })
+
+function fill_roster(id, access_token) {
+	$.post("{% url 'account:fill_roster' %}",
+	{
+		team_id : id,
+		access_token : access_token
+
+	}).done(function(data) {
+		data = JSON.parse(data);
+		if (data.result == 'success') {
+			var icon = result.children('i');
+			icon.removeClass('glyphicon-unchecked');
+			icon.addClass('glyphicon-ok');
+			icon.unbind('click');
+		} else {
+			result.children('i').removeClass('glyphicon-unchecked')
+			.addClass('glyphicon-remove');
+		}
+	}).fail(function(err) {
+		var icon = result.children('i');
+		icon.removeClass('glyphicon-unchecked');
+		icon.addClass('glyphicon-repeat');
+		icon.click(function() {
+			fill_roster(id, access_token);
+		});
+	});
+}
 </script>
 {% endblock %}
