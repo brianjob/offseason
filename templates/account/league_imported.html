@@ -1,60 +1,65 @@
-	{% extends "base.html" %}
-	{% block content %}
-	<div class="container">
-		<div class="row">
-			We're populating your league's rosters right now. Make sure you wait until check marks appear next to each team before you navigate away from the page. If an import fails, please retry it with the <i class="glyphicon glyphicon-repeat"> icon. Yahoo likes to be uncooperative sometimes.
-		</div>
-		<table class="table">
-			<thead>
-				<tr><th>Team</th><th>Imported</th></tr>
-			</thead>
-			<tbody>
-				{% for team in league.team_set.all %}
-				<tr class="team-row" data-id="{{team.id}}">
-					<td>{{team.name}}</td>
-					<td class="result"><i class="glyphicon glyphicon-unchecked"></i></td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		We're populating your league's rosters right now. Make sure you wait until check marks appear next to each team before you navigate away from the page. If an import fails, please retry it with the <i class="glyphicon glyphicon-repeat"> icon. Yahoo likes to be uncooperative sometimes.
 	</div>
-	<script type="text/javascript">
-	$(function() {
-		$(".team-row").each(function() {
-			var id = $(this).data('id');
-			var result = $(this).children('.result');
+	<table class="table">
+		<thead>
+			<tr><th>Team</th><th>Imported</th></tr>
+		</thead>
+		<tbody>
+			{% for team in league.team_set.all %}
+			<tr class="team-row" data-id="{{team.id}}">
+				<td>{{team.name}}</td>
+				<td class="result"><i class="glyphicon glyphicon-unchecked"></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+$(function() {
+	$(".team-row").each(function() {
+		var id = $(this).data('id');
+		var result = $(this).children('.result');
+		fill_roster(id, result);
+	});
+})
 
-			fill_roster(id, "{{access_token}}", result);
-		});
-	})
-
-	function fill_roster(id, access_token, result) {
-		function handle_error(id, access_token, result) {
-			result.html('<a href="#" ><i class="glyphicon glyphicon-repeat"></a>');
-			result.children("a").click(function() {
-				fill_roster(id, access_token, result);
+function fill_roster(id, result) {
+	function handle_error(id, result) {
+		result.children("i")
+			.removeClass("glyphicon-unchecked")
+			.addClass("glyphicon-repeat")
+			.wrap('<a href="#"></a>')
+			.click(function() {
+				fill_roster(id, result);
 			});
-		}
-
-		$.post("{% url 'account:fill_roster' %}",
-		{
-			team_id : id,
-			access_token : access_token
-
-		}).done(function(data) {
-			data = JSON.parse(data);
-			if (data.result == 'success') {
-				var a = result.children('a');
-				if (a)
-					a.unbind('click');
-
-				result.html('<i class="glyphicon glyphicon-ok">');
-			} else {
-				handle_error(id, access_token, result);
-			}
-		}).fail(function(err) {
-			handle_error(id, access_token, result);
-		});
 	}
-	</script>
-	{% endblock %}
+	function handle_success(id, result) {
+		result.children("i")
+			.removeClass("glyphicon-unchecked")
+			.removeClass("glyphicon-repeat")
+			.addClass("glyphicon-ok")
+			.unbind('click');
+	}
+
+	$.post("{% url 'account:fill_roster' %}",
+	{
+		team_id : id,
+		access_token : "{{access_token}}"
+
+	}).done(function(data) {
+		data = JSON.parse(data);
+		if (data.result == 'success') {
+			handle_success(id, result);
+		} else {
+			handle_error(id, result);
+		}
+	}).fail(function(err) {
+		handle_error(id, result);
+	});
+}
+</script>
+{% endblock %}
