@@ -45,9 +45,10 @@ function fill_roster(id, result) {
 			.removeClass("glyphicon-unchecked")
 			.removeClass("glyphicon-repeat")
 			.addClass("glyphicon-ok")
-			.unwrap()
 			.unbind('click')
 			.closest("tr").addClass("success");
+
+		result.find("a > .glyphicon-unchecked, a > .glyphicon-repeat").unwrap()
 
 		result.find(".glyphicon-remove").remove();
 	}
