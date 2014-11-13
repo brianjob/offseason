@@ -1,26 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-	<div class="row">
-		<p>
-			We're populating your league's rosters right now. Make sure you wait until check marks appear next to each team before you navigate away from the page. If an import fails, please retry it with the <i class="glyphicon glyphicon-repeat"> icon. Yahoo likes to be uncooperative sometimes.
-		</p>
-	</div>
-	<div class="row">
-		<table class="table">
-			<thead>
-				<tr><th>Team</th><th>Imported</th></tr>
-			</thead>
-			<tbody>
-				{% for team in league.team_set.all %}
-				<tr class="team-row" data-id="{{team.id}}">
-					<td>{{team.name}}</td>
-					<td class="result"><i class="glyphicon glyphicon-unchecked"></td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
+	<table class="table">
+		<thead>
+			<tr><th>Team</th><th>Imported</th></tr>
+		</thead>
+		<tbody>
+			{% for team in league.team_set.all %}
+			<tr class="team-row" data-id="{{team.id}}">
+				<td>{{team.name}}</td>
+				<td class="result"><i class="glyphicon glyphicon-unchecked"></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 </div>
 <script type="text/javascript">
 $(function() {
@@ -42,7 +35,7 @@ function fill_roster(id, result) {
 			});
 	}
 	function handle_success(id, result) {
-		result.children("i")
+		result.find("i")
 			.removeClass("glyphicon-unchecked")
 			.removeClass("glyphicon-repeat")
 			.addClass("glyphicon-ok")
