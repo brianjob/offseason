@@ -2,21 +2,25 @@
 {% block content %}
 <div class="container">
 	<div class="row">
-		We're populating your league's rosters right now. Make sure you wait until check marks appear next to each team before you navigate away from the page. If an import fails, please retry it with the <i class="glyphicon glyphicon-repeat"> icon. Yahoo likes to be uncooperative sometimes.
+		<p>
+			We're populating your league's rosters right now. Make sure you wait until check marks appear next to each team before you navigate away from the page. If an import fails, please retry it with the <i class="glyphicon glyphicon-repeat"> icon. Yahoo likes to be uncooperative sometimes.
+		</p>
 	</div>
-	<table class="table">
-		<thead>
-			<tr><th>Team</th><th>Imported</th></tr>
-		</thead>
-		<tbody>
-			{% for team in league.team_set.all %}
-			<tr class="team-row" data-id="{{team.id}}">
-				<td>{{team.name}}</td>
-				<td class="result"><i class="glyphicon glyphicon-unchecked"></td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+	<div class="row">
+		<table class="table">
+			<thead>
+				<tr><th>Team</th><th>Imported</th></tr>
+			</thead>
+			<tbody>
+				{% for team in league.team_set.all %}
+				<tr class="team-row" data-id="{{team.id}}">
+					<td>{{team.name}}</td>
+					<td class="result"><i class="glyphicon glyphicon-unchecked"></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 </div>
 <script type="text/javascript">
 $(function() {
