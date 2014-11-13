@@ -27,11 +27,9 @@ $(function() {
 
 function fill_roster(id, access_token, result) {
 	function handle_error(id, access_token, result) {
-		var icon = result.children('i');
-		icon.removeClass('glyphicon-unchecked');
-		icon.addClass('glyphicon-repeat');
-		icon.click(function() {
-			fill_roster(id, access_token);
+		result.html('<a href="#" ><i class="glyphicon glyphicon-repeat"></a>')
+		result.click(function() {
+			fill_roster(id, access_token, result);
 		});
 	}
 
@@ -43,10 +41,8 @@ function fill_roster(id, access_token, result) {
 	}).done(function(data) {
 		data = JSON.parse(data);
 		if (data.result == 'success') {
-			var icon = result.children('i');
-			icon.removeClass('glyphicon-unchecked');
-			icon.addClass('glyphicon-ok');
-			icon.unbind('click');
+			result.html('<i class="glyphicon glyphicon-success">');
+			result.unbind('click');
 		} else {
 			handle_error(id, access_token, result);
 		}
