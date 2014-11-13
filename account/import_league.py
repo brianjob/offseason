@@ -114,16 +114,23 @@ class League_Import(object):
 		num_picks = self.get_num_picks(league)
 
 		for team in league_result['team']:
-			guid = team['managers']['manager']['guid']
+			# leagues with co managers will have a list of managers
+			# our schema doesn't support this right now so just take first manager
+			if type(team['managers']['manager']) == type({}):
+				json_mgr = team['managers']['manager']
+			else:
+				json_mgr = team['managers']['manager'][0]
+
+			guid = json_mgr['guid']
 
 			try:
 				manager = Manager.objects.get(yahoo_guid=guid)
-				if 'email' in team['managers']['manager'] and manager.user.email == '':
-					manager.user.email = team['managers']['manager']['email']
+				if 'email' in json_mgr and manager.user.email == '':
+					manager.user.email = json_mgr['email']
 					manager.save()
 			except Manager.DoesNotExist:
 				try:
-					email = team['managers']['manager']['email']
+					email = json_mgr['email']
 					username = email
 				except KeyError:
 					email = ''
@@ -150,7 +157,7 @@ class League_Import(object):
 
 			t.save()
 
-			if team['managers']['manager'].has_key('is_commissioner') and team['managers']['manager']['is_commissioner'] == "1":
+			if json_mgr.has_key('is_commissioner') and json_mgr['is_commissioner'] == "1":
 				league.commissioner = manager
 				league.save()
 
