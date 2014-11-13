@@ -133,7 +133,7 @@ class League_Import(object):
 					username = guid
 
 					# give the user a random unique pw and they can change it later
-				user = User.objects.create_user(username, email, uuid.uuid4())
+				user, c = User.objects.get_or_create(username, email, uuid.uuid4())
 				manager = Manager(yahoo_guid=guid, user=user)
 				manager.save()
 			

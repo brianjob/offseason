@@ -1,7 +1,5 @@
 import django
-from trades.models import League, Manager, Team, Player, Pick
 from offseason.models import MessageType, Message
-from django.contrib.auth.models import User
 
 import os
 
