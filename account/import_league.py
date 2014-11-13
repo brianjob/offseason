@@ -72,14 +72,10 @@ class League_Import(object):
 
 		date_str = date.strftime("%Y-%m-%d")
 
-		result = None
-		counter = 0
-		while(result is None and counter < 1):
-			result = self.run_query(
-				"select * from fantasysports.teams.roster where team_key='{}' and date='{}'"
-				.format(team_key, date_str)
-			)
-			counter += 1
+		result = self.run_query(
+			"select * from fantasysports.teams.roster where team_key='{}' and date='{}'"
+			.format(team_key, date_str)
+		)
 
 		if result is None:
 			raise Exception("could not fetch roster for {}".format(team.name))
@@ -238,6 +234,7 @@ class League_Import(object):
 			raise Exception('access token not generated')
 
 		try_count = 0
+		max_attempts = 1
 
 		while True:
 			print 'running[{}]: {}'.format(try_count, query)
@@ -247,9 +244,9 @@ class League_Import(object):
 
 			if 'query' in response and 'results' in response['query'] and response['query']['results'] is not None:
 				return response['query']['results']
-			elif 'error' in response and try_count > 2:
+			elif 'error' in response and try_count > max_attempts:
 				raise Exception('YQL query failed with error: "%s".' % response['error']['description'])
-			elif try_count > 2:
+			elif try_count >= max_attempts:
 				raise Exception('YQL response malformed.')
 
 			try_count += 1
