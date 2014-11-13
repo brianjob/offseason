@@ -21,32 +21,20 @@ $(function() {
 		var id = $(this).data('id');
 		var result = $(this).children('.result');
 
-		fill_roster(id, "{{access_token}}")
-		$.post("{% url 'account:fill_roster' %}",
-		{
-			team_id : id,
-			access_token : "{{access_token}}"
-
-		}).done(function(data) {
-			data = JSON.parse(data);
-			if (data.result == 'success') {
-				result.children('i').removeClass('glyphicon-unchecked')
-				.addClass('glyphicon-ok');
-			} else {
-				result.children('i').removeClass('glyphicon-unchecked')
-				.addClass('glyphicon-remove');
-			}
-		})
-		.fail(function(err) {
-			var icon = result.children('i');
-			icon.removeClass('glyphicon-unchecked');
-			icon.addClass('glyphicon-repeat');
-			});
-		});
+		fill_roster(id, "{{access_token}}", result);
 	});
 })
 
-function fill_roster(id, access_token) {
+function fill_roster(id, access_token, result) {
+	function handle_error(id, access_token, result) {
+		var icon = result.children('i');
+		icon.removeClass('glyphicon-unchecked');
+		icon.addClass('glyphicon-repeat');
+		icon.click(function() {
+			fill_roster(id, access_token);
+		});
+	}
+
 	$.post("{% url 'account:fill_roster' %}",
 	{
 		team_id : id,
@@ -60,16 +48,10 @@ function fill_roster(id, access_token) {
 			icon.addClass('glyphicon-ok');
 			icon.unbind('click');
 		} else {
-			result.children('i').removeClass('glyphicon-unchecked')
-			.addClass('glyphicon-remove');
+			handle_error(id, access_token, result);
 		}
 	}).fail(function(err) {
-		var icon = result.children('i');
-		icon.removeClass('glyphicon-unchecked');
-		icon.addClass('glyphicon-repeat');
-		icon.click(function() {
-			fill_roster(id, access_token);
-		});
+		handle_error(id, access_token, result);
 	});
 }
 </script>
