@@ -238,18 +238,21 @@ class League_Import(object):
 			raise Exception('access token not generated')
 
 		try_count = 0
-		while 'query' in response and 'results' in response['query'] and response is None and try_count < 3: # try a max of 3 times
+
+		while True:
 			print 'running[{}]: {}'.format(try_count, query)
 			response = self.oauthapp.yql(query)
 
-		print 'response: ' + json.dumps(response)
+			print 'response: ' + json.dumps(response)
 
-		if 'query' in response and 'results' in response['query']:
-			return response['query']['results']
-		elif 'error' in response:
-			raise Exception('YQL query failed with error: "%s".' % response['error']['description'])
-		else:
-			raise Exception('YQL response malformed.')
+			if 'query' in response and 'results' in response['query'] and response['query']['results'] is not None:
+				return response['query']['results']
+			elif 'error' in response and try_count > 2:
+				raise Exception('YQL query failed with error: "%s".' % response['error']['description'])
+			elif try_count > 2:
+				raise Exception('YQL response malformed.')
+
+			try_count += 1
 
 	def get_access_token(self):
 		return self.oauthapp.token
