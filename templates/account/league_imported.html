@@ -33,29 +33,26 @@ function fill_roster(id, result) {
 			.removeClass("glyphicon-unchecked")
 			.addClass("glyphicon-repeat")
 			.wrap('<a href="#"></a>')
-			.before('<i class="glyphicon glyphicon-remove" style="margin-right:10px">')
 			.click(function() {
 				$(this).closest("tr").removeClass("success").removeClass("danger");
-				$(this).siblings(".glyphicon-remove").remove();
 				$(this).unwrap()
 					.removeClass("glyphicon-repeat")
 					.addClass("glyphicon-unchecked")
 
+				$(this).siblings(".glyphicon-remove").remove();
 				fill_roster(id, result);
 			})
 			.closest("tr").addClass("danger");
+
+		result.children("a")
+			.before('<i class="glyphicon glyphicon-remove" style="margin-right:10px">')
 	}
 	function handle_success(id, result) {
-		result.find("a > .glyphicon-unchecked, a > .glyphicon-repeat").unwrap();
-
-		result.find(".glyphicon-unchecked, .glyphicon-repeat")
+		result.find(".glyphicon-unchecked")
 			.removeClass("glyphicon-unchecked")
-			.removeClass("glyphicon-repeat")
 			.addClass("glyphicon-ok")
 			.unbind('click')
 			.closest("tr").addClass("success");
-
-		result.find(".glyphicon-remove").remove();
 	}
 
 	$.post("{% url 'account:fill_roster' %}",
