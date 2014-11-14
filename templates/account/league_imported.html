@@ -36,6 +36,11 @@ function fill_roster(id, result) {
 			.before('<i class="glyphicon glyphicon-remove" style="margin-right:10px">')
 			.click(function() {
 				$(this).closest("tr").removeClass("success").removeClass("danger");
+				$(this).siblings(".glyphicon-remove").remove();
+				$(this).unwrap()
+					.removeClass("glyphicon-repeat")
+					.addClass("glyphicon-unchecked")
+
 				fill_roster(id, result);
 			})
 			.closest("tr").addClass("danger");
