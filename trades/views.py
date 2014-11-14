@@ -74,9 +74,7 @@ def propose_trade(request, team_id):
 		return HttpResponseRedirect(reverse('trades:league', 
 			args=(t2.league.id, )) + '?msg=' + str(msg.id))
 
-	t1 = request.user.manager.teams_managed.get(league=t2.league)
-	if t1 is None:
-		t1 = request.user.manager.teams_comanaged.get(league=t2.league)
+	t1 = request.user.manager.team_set.get(league=t2.league)
 
 	trade = Trade(team1=t1, team2=t2)
 
