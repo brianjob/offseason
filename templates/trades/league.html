@@ -16,7 +16,7 @@
 					{% if request.user.manager.id == team.manager.id %}
 					<td></td>
 					{% else %}
-					<td><a class="btn btn-primary btn-sm" href="{% url 'trades:new_trade' team.pk %}"><i class="glyphicon glyphicon-transfer"></a></td>
+					<td><a href="{% url 'trades:new_trade' team.pk %}"><i class="glyphicon glyphicon-transfer"></a></td>
 					{% endif %}
 				</tr>
 				{% endfor %}
