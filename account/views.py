@@ -86,8 +86,11 @@ def import_league_callback(request):
 	request_token = request.session['request_token']
 	oauth_verifier = request.GET['oauth_verifier']
 
-	li = League_Import(IMPORT_LEAGUE_CALLBACK,
-		request_token, oauth_verifier)
+	try:
+		li = League_Import(IMPORT_LEAGUE_CALLBACK,
+			request_token, oauth_verifier)
+	except KeyError:
+		return render(request, 'account/authentication_error.html')
 
 	league_key = li.get_league_key(league_id)
 
