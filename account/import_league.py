@@ -57,11 +57,6 @@ class League_Import(object):
 		return tot
 
 	def fill_roster(self, team):
-		import random
-		random.seed()
-		if random.randint(0, 9) % 2 == 0:
-			raise Exception("FUCK")
-			
 		if team.yahoo_id is None:
 			raise Exception('Roster cannot be auto filled with a null team yahoo id')
 		if team.league.yahoo_id is None:
