@@ -38,8 +38,9 @@ function fill_roster(id, result) {
 				$(this).unwrap()
 					.removeClass("glyphicon-repeat")
 					.addClass("glyphicon-unchecked")
+					.unbind('click')
 
-				$(this).siblings(".glyphicon-remove").remove();
+				$(this).siblings(".glyphicon-remove").remove();	
 				fill_roster(id, result);
 			})
 			.closest("tr").addClass("danger");
