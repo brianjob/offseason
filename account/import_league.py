@@ -262,7 +262,7 @@ class League_Import(object):
 	def get_access_token(self):
 		return self.oauthapp.token
 
-	def dumpclean(obj):
+	def dumpclean(self, obj):
 		if type(obj) == dict:
 			for k, v in obj.items():
 				if hasattr(v, '__iter__'):
