@@ -249,7 +249,11 @@ class League_Import(object):
 					
 					print 'NUM PICKS: ' + str(src_team.pick_set.count())
 					
-					pick = src_team.pick_set.filter(round=int(pick['round']))[0]
+					pick_results = src_team.pick_set.filter(round=int(pick['round']))
+					if pick_results.count() < 1:
+						print 'NO PICK!'
+
+					pick = pick_results[0]
 					pick.team = dest_team
 					pick.save()
 
