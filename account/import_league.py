@@ -263,18 +263,18 @@ class League_Import(object):
 		return self.oauthapp.token
 
 	def dumpclean(self,obj):
-    if type(obj) == dict:
-        for k, v in obj.items():
-            if hasattr(v, '__iter__'):
-                print k
-                dumpclean(v)
-            else:
-                print '%s : %s' % (k, v)
-    elif type(obj) == list:
-        for v in obj:
-            if hasattr(v, '__iter__'):
-                dumpclean(v)
-            else:
-                print v
-    else:
-        print obj
+		if type(obj) == dict:
+			for k, v in obj.items():
+				if hasattr(v, '__iter__'):
+					print k
+					dumpclean(v)
+				else:
+					print '%s : %s' % (k, v)
+				elif type(obj) == list:
+					for v in obj:
+						if hasattr(v, '__iter__'):
+							dumpclean(v)
+						else:
+							print v
+						else:
+							print obj
