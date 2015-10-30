@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 import urllib
 import uuid
 import os
+import traceback
 
 APP_NAME = os.environ['APP_NAME'];
 IMPORT_LEAGUE_CALLBACK = 'http://{}.herokuapp.com/account/import_league_callback'.format(APP_NAME)
@@ -101,6 +102,7 @@ def import_league_callback(request):
 	try:
 		league = li.import_league(league_id, request.user.manager)
 	except Exception:
+		traceback.print_exc()
 		league = League.objects.filter(yahoo_id=league_key)
 		if league.exists():
 			league.delete()
