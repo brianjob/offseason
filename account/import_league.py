@@ -13,6 +13,23 @@ CONSUMER_SECRET   = os.environ['CONSUMER_SECRET']
 APPLICATION_ID    = os.environ['APPLICATION_ID']
 
 
+def dumpclean(obj):
+	if type(obj) == dict:
+		for k, v in obj.items():
+			if hasattr(v, '__iter__'):
+				print k
+				dumpclean(v)
+			else:
+				print '%s : %s' % (k, v)
+	elif type(obj) == list:
+		for v in obj:
+			if hasattr(v, '__iter__'):
+				dumpclean(v)
+			else:
+				print v
+	else:
+		print obj
+
 class League_Import(object):
 	def __init__(self, callback_url, request_token_str=None, verifier=None):
 		self.oauthapp = yahoo.application.OAuthApplication(CONSUMER_KEY, CONSUMER_SECRET, APPLICATION_ID, callback_url)
@@ -262,19 +279,3 @@ class League_Import(object):
 	def get_access_token(self):
 		return self.oauthapp.token
 
-	def dumpclean(self, obj):
-		if type(obj) == dict:
-			for k, v in obj.items():
-				if hasattr(v, '__iter__'):
-					print k
-					dumpclean(v)
-				else:
-					print '%s : %s' % (k, v)
-		elif type(obj) == list:
-			for v in obj:
-				if hasattr(v, '__iter__'):
-					dumpclean(v)
-				else:
-					print v
-		else:
-			print obj
