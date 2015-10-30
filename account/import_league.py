@@ -229,7 +229,7 @@ class League_Import(object):
 
 					src_team = league.team_set.get(yahoo_id=src_id)
 					dest_team = league.team_set.get(yahoo_id=dest_id)
-					print 'pick: ' + pick
+					print 'pick: ' + dumpclean(pick)
 					pick = src_team.pick_set.filter(round=int(pick['round']))[0]
 					pick.team = dest_team
 					pick.save()
@@ -261,3 +261,20 @@ class League_Import(object):
 
 	def get_access_token(self):
 		return self.oauthapp.token
+
+	def dumpclean(self,obj):
+    if type(obj) == dict:
+        for k, v in obj.items():
+            if hasattr(v, '__iter__'):
+                print k
+                dumpclean(v)
+            else:
+                print '%s : %s' % (k, v)
+    elif type(obj) == list:
+        for v in obj:
+            if hasattr(v, '__iter__'):
+                dumpclean(v)
+            else:
+                print v
+    else:
+        print obj
