@@ -6,12 +6,6 @@ from django.contrib.auth.models import User
 import uuid
 import os
 import simplejson as json
-# import the logging library
-import logging
-
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
-
 
 # Yahoo! OAuth Credentials - http://developer.yahoo.com/dashboard/
 CONSUMER_KEY      = os.environ['CONSUMER_KEY']
@@ -218,29 +212,25 @@ class League_Import(object):
 			pick.save()
 
 	def run_pick_transactions(self, league):
+		print 'running pick transactions'
 		result = self.run_query(
 			"select * from fantasysports.leagues.transactions where league_key='{}'"
 			.format(league.yahoo_id)
 		)
 
-		logger.debug('got transactions')
-
+		print 'level 1'
 		for transaction in result['league']['transactions']['transaction']:
-			logger.debug('level 1')
+			print 'level 2'
 			if transaction['type'] == 'trade' and transaction['status'] == 'successful' and 'picks' in transaction:
 				for pick in transaction['picks']['pick']:
-					logger.debug('level 2')
+					print 'level 3'
 					src_id = pick['source_team_key'].split('.t.')[1]
-					logger.debug('got source key')
 					dest_id = pick['destination_team_key'].split('.t.')[1]
-					logger.debug('got destination key')
 
 					src_team = league.team_set.get(yahoo_id=src_id)
 					dest_team = league.team_set.get(yahoo_id=dest_id)
 
-
 					pick = src_team.pick_set.filter(round=int(pick['round']))[0]
-					logger.debug('getting round')
 					pick.team = dest_team
 					pick.save()
 
