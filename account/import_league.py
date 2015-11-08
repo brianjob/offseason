@@ -235,23 +235,18 @@ class League_Import(object):
 			.format(league.yahoo_id)
 		)
 
-		print 'level 1'
 		for transaction in result['league']['transactions']['transaction']:
-			print 'level 2'
 			if transaction['type'] == 'trade' and transaction['status'] == 'successful' and 'picks' in transaction:
 				for pick in transaction['picks']['pick']:
-					print 'level 3'
 					src_id = pick['source_team_key'].split('.t.')[1]
 					dest_id = pick['destination_team_key'].split('.t.')[1]
 
 					src_team = league.team_set.get(yahoo_id=src_id)
 					dest_team = league.team_set.get(yahoo_id=dest_id)
 					
-					print 'NUM PICKS: ' + str(src_team.pick_set.count())
-					
 					pick_results = src_team.pick_set.filter(round=int(pick['round']))
 					if pick_results.count() < 1:
-						print 'NO PICK!'
+						print 'NO PICK: {}'.format(pick['round'])
 
 					pick = pick_results[0]
 					pick.team = dest_team
