@@ -241,7 +241,7 @@ class League_Import(object):
 				print '{},'.format(pick.round),
 			print '\n\n'
 
-		for transaction in result['league']['transactions']['transaction']:
+		for transaction in reversed(result['league']['transactions']['transaction']):
 			if transaction['type'] == 'trade' and transaction['status'] == 'successful' and 'picks' in transaction:
 				for pick in transaction['picks']['pick']:
 					src_id = pick['source_team_key'].split('.t.')[1]
@@ -257,6 +257,7 @@ class League_Import(object):
 
 					pick = pick_results[0]
 					pick.team = dest_team
+
 					pick.save()
 
 	def get_current_user_guid(self):
