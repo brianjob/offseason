@@ -63,7 +63,7 @@ class Pick(models.Model):
 	team = models.ForeignKey(Team)
 
 	def __unicode__(self):
-		return str(self.year) + ' - pick ' + str(self.round)
+		return str(self.round)
 
 class Trade(models.Model):
 	team1 = models.ForeignKey(Team, related_name='trades_proposed')
