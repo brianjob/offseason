@@ -235,6 +235,9 @@ class League_Import(object):
 			.format(league.yahoo_id)
 		)
 
+		for team in league.team_set:
+			print '{} picks: {}'.format(','.join(team.pick_set))
+
 		for transaction in result['league']['transactions']['transaction']:
 			if transaction['type'] == 'trade' and transaction['status'] == 'successful' and 'picks' in transaction:
 				for pick in transaction['picks']['pick']:
@@ -266,8 +269,6 @@ class League_Import(object):
 		while True:
 			print 'running[{}]: {}'.format(try_count, query)
 			response = self.oauthapp.yql(query)
-
-			print 'response: ' + json.dumps(response)
 
 			if 'query' in response and 'results' in response['query'] and response['query']['results'] is not None:
 				return response['query']['results']
