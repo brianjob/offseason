@@ -236,7 +236,10 @@ class League_Import(object):
 		)
 
 		for team in league.team_set:
-			print '{} picks: {}'.format(','.join(team.pick_set))
+			print '{} picks: '
+			for pick in team.pick_set:
+				print '{},'.format(pick.round),
+			print '\n\n'
 
 		for transaction in result['league']['transactions']['transaction']:
 			if transaction['type'] == 'trade' and transaction['status'] == 'successful' and 'picks' in transaction:
