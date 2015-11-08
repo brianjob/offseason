@@ -229,7 +229,7 @@ class League_Import(object):
 			pick.save()
 
 	def run_pick_transactions(self, league):
-		print 'running pick transactions'
+		print 'running pick transactions for league {}'.format(league.yahoo_id)
 		result = self.run_query(
 			"select * from fantasysports.leagues.transactions where league_key='{}'"
 			.format(league.yahoo_id)
@@ -248,8 +248,6 @@ class League_Import(object):
 					print '{} trades pick #{} to {}'.format(src_team.name, pick_round, dest_team)
 					
 					pick_results = src_team.pick_set.filter(round=int(pick_round))
-					if pick_results.count() < 1:
-						print 'NO PICK: {}'.format(pick_round)
 
 					pick = pick_results[0]
 					pick.team = dest_team
