@@ -243,10 +243,13 @@ class League_Import(object):
 
 					src_team = league.team_set.get(yahoo_id=src_id)
 					dest_team = league.team_set.get(yahoo_id=dest_id)
+					pick_round = int(pick['round'])
+
+					print '{} trades pick #{} to {}'.format(src_team.name, pick_round, dest_team)
 					
-					pick_results = src_team.pick_set.filter(round=int(pick['round']))
+					pick_results = src_team.pick_set.filter(round=int(pick_round))
 					if pick_results.count() < 1:
-						print 'NO PICK: {}'.format(pick['round'])
+						print 'NO PICK: {}'.format(pick_round)
 
 					pick = pick_results[0]
 					pick.team = dest_team
