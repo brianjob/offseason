@@ -236,8 +236,8 @@ class League_Import(object):
 		)
 
 		for team in league.team_set.all():
-			print '{} picks: '
-			for pick in team.pick_set:
+			print '{} picks: '.format(team.name)
+			for pick in team.pick_set.all():
 				print '{},'.format(pick.round),
 			print '\n\n'
 
