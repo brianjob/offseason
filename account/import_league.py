@@ -235,7 +235,7 @@ class League_Import(object):
 			.format(league.yahoo_id)
 		)
 
-		for team in league.team_set:
+		for team in league.team_set.all():
 			print '{} picks: '
 			for pick in team.pick_set:
 				print '{},'.format(pick.round),
