@@ -1,9 +1,12 @@
 import django
-from offseason.models import MessageType, Message
 
 import os
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'offseason.settings'
+
+from offseason.models import MessageType, Message
+
+
 
 django.setup()
 
