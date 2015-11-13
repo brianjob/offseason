@@ -272,10 +272,10 @@ def complete_trades(league):
 
 			# SWAP PLAYERS / PICKS
 			for playerpiece in trade.playerpiece_set.all():
-				if playerpiece.player.team == trade.team1:
-					playerpiece.player.team = trade.team2
+				if playerpiece.player.fantasy_team == trade.team1:
+					playerpiece.player.fantasy_team = trade.team2
 				else:
-					playerpiece.player.team = trade.team1
+					playerpiece.player.fantasy_team = trade.team1
 
 				playerpiece.player.save()
 
