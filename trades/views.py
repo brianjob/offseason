@@ -271,7 +271,7 @@ def complete_trades(league):
 			trade.completed_date = timezone.now()
 
 			# SWAP PLAYERS / PICKS
-			for playerpiece in trade.playerpiece_set:
+			for playerpiece in trade.playerpiece_set.all():
 				if playerpiece.player.team == trade.team1:
 					playerpiece.player.team = trade.team2
 				else:
@@ -279,7 +279,7 @@ def complete_trades(league):
 
 				playerpiece.player.save()
 
-			for pickpiece in trade.pickpiece_set:
+			for pickpiece in trade.pickpiece_set.all():
 				if pickpiece.pick.team == trade.team1:
 					pickpiece.pick.team = trade.team2
 				else:
