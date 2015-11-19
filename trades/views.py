@@ -71,7 +71,7 @@ def propose_trade(request, team_id):
 
 	if len(players) == 0 and len(picks) == 0:
 		msg = Message.objects.get(text=Message.EMPTY_TRADE)
-		return HttpResponseRedirect(reverse('trades:league', 
+		return HttpResponseRedirect(reverse('trades:league',
 			args=(t2.league.id, )) + '?msg=' + str(msg.id))
 
 	t1 = request.user.manager.team_set.get(league=t2.league)
@@ -93,7 +93,7 @@ def propose_trade(request, team_id):
 	if t1_picks != t2_picks:
 		trade.delete()
 		msg = Message.objects.get(text=Message.UNEQUAL_PICKS)
-		return HttpResponseRedirect(reverse('trades:league', 
+		return HttpResponseRedirect(reverse('trades:league',
 			args=(t1.league.id, )) + '?msg=' + str(msg.id))
 
 	for player_id in players:
@@ -140,13 +140,16 @@ def accept_trade(request):
 
 	if is_receiver(request, trade):
 		trade.accepted_date = timezone.now()
+
+		complete_trade(trade)
+
 		trade.save()
 		msg = Message.objects.get(text=Message.TRADE_ACCEPTED)
 	else:
 		msg = Message.objects.get(text=Message.NOT_RECEIVER)
 
 	return HttpResponseRedirect(reverse('trades:league', 
-		args=(trade.team1.league.id, )) + '?msg=' + str(msg.id))	
+		args=(trade.team1.league.id, )) + '?msg=' + str(msg.id))
 
 @login_required
 def reject_trade(request):
@@ -226,35 +229,35 @@ def inbox(request):
 @login_required
 def outbox(request):
 	trades = Trade.objects.filter(team1__in=request.user.manager.team_set.all()).exclude(proposed_date=None).filter(accepted_date=None).filter(rejected_date=None)
-	return render(request, 'trades/tradelist.html',	
+	return render(request, 'trades/tradelist.html',
 		{ 'heading' : 'Outbox',
 		  'trades' : trades })
 
 @login_required
 def drafts(request):
 	trades = Trade.objects.filter(team1__in=request.user.manager.team_set.all()).filter(proposed_date=None)
-	return render(request, 'trades/tradelist.html', 
+	return render(request, 'trades/tradelist.html',
 		{ 'heading' : 'Drafts',
 		  'trades': trades })
 
 @login_required
 def pending(request):
 	trades = Trade.objects.filter(Q(team1__in=request.user.manager.team_set.all()) | Q(team2__in=request.user.manager.team_set.all())).exclude(accepted_date=None).filter(completed_date=None)
-	return render(request, 'trades/tradelist.html', 
+	return render(request, 'trades/tradelist.html',
 		{ 'heading' : 'My Pending Transactions',
 		 'trades' : trades })
 
 @login_required
 def my_trans(request):
 	trades = Trade.objects.filter(Q(team1__in=request.user.manager.team_set.all()) | Q(team2__in=request.user.manager.team_set.all()))
-	return render(request, 'trades/tradelist.html', 
+	return render(request, 'trades/tradelist.html',
 		{ 'heading' : 'My Transactions',
 		 'trades' : trades })
 
 @login_required
 def league_trans(request):
 	trades = Trade.objects.filter(team1__league__in=[t.league for t in request.user.manager.team_set.all()]).exclude(completed_date=None)
-	return render(request, 'trades/tradelist.html', 
+	return render(request, 'trades/tradelist.html',
 		{ 'heading' : 'All Transactions',
 		 'trades' : trades })
 
@@ -265,26 +268,55 @@ def complete_trades(league):
 	max_accept_date = timezone.now() - timedelta(days=REVIEW_PERIOD)
 	mark_for_completion = Trade.objects.filter(team1__league=league).exclude(accepted_date=None).filter(completed_date=None).filter(accepted_date__lte=max_accept_date)
 	for trade in mark_for_completion:
-		if trade.vetoed():
-			trade.vetoed_date = timezone.now()
-		else:
-			trade.completed_date = timezone.now()
+		complete_trade(trade)
 
-			# SWAP PLAYERS / PICKS
-			for playerpiece in trade.playerpiece_set.all():
-				if playerpiece.player.fantasy_team == trade.team1:
-					playerpiece.player.fantasy_team = trade.team2
-				else:
-					playerpiece.player.fantasy_team = trade.team1
+def complete_trade(trade):
+	if trade.vetoed():
+		trade.vetoed_date = timezone.now()
+	else:
+		trade.completed_date = timezone.now()
 
-				playerpiece.player.save()
+		cancel_conflicting_trades(trade)
 
-			for pickpiece in trade.pickpiece_set.all():
-				if pickpiece.pick.team == trade.team1:
-					pickpiece.pick.team = trade.team2
-				else:
-					pickpiece.pick.team = trade.team1
+		# SWAP PLAYERS / PICKS
+		for playerpiece in trade.playerpiece_set.all():
+			if playerpiece.player.fantasy_team == trade.team1:
+				playerpiece.player.fantasy_team = trade.team2
+			else:
+				playerpiece.player.fantasy_team = trade.team1
 
-				pickpiece.pick.save()
+			playerpiece.player.save()
 
-		trade.save()
+		for pickpiece in trade.pickpiece_set.all():
+			if pickpiece.pick.team == trade.team1:
+				pickpiece.pick.team = trade.team2
+			else:
+				pickpiece.pick.team = trade.team1
+
+			pickpiece.pick.save()
+
+	trade.save()
+
+def cancel_conflicting_trades(trade):
+	players = [p.player for p in trade.playerpiece_set.all()]
+	picks = [p.pick for p in trade.pickpiece_set.all()]
+
+	cancel_trades(team1.trades_proposed)
+	cancel_trades(team1.trades_received)
+
+def cancel_trades(trades):
+	for t in trades.filter(rejected_date=None).filter(completed_date=None).filter(vetoed_date=None):
+		if t == trade:
+			continue
+
+		t_players = [p.player for p in t.playerpiece_set.all()]
+		t_picks = [p.pick for p in t.pickpiece_set.all()]
+
+		if lists_conflict(t_players, players) or lists_conflict(t_picks, picks):
+			t.rejected_date = time.now()
+			t.save()
+
+
+def lists_conflict(a, b):
+	return bool(set(a) & set(b))
+
