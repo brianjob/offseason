@@ -315,7 +315,7 @@ def cancel_trades(trades, players, picks):
 		t_picks = [p.pick for p in t.pickpiece_set.all()]
 
 		if lists_conflict(t_players, players) or lists_conflict(t_picks, picks):
-			t.rejected_date = time.now()
+			t.rejected_date = timezone.now()
 			t.save()
 
 
