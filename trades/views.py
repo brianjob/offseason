@@ -301,8 +301,10 @@ def cancel_conflicting_trades(trade):
 	players = [p.player for p in trade.playerpiece_set.all()]
 	picks = [p.pick for p in trade.pickpiece_set.all()]
 
-	cancel_trades(team1.trades_proposed)
-	cancel_trades(team1.trades_received)
+	cancel_trades(trade.team1.trades_proposed)
+	cancel_trades(trade.team1.trades_received)
+	cancel_trades(trade.team2.trades_proposed)
+	cancel_trades(trade.team2.trades_received)
 
 def cancel_trades(trades):
 	for t in trades.filter(rejected_date=None).filter(completed_date=None).filter(vetoed_date=None):
